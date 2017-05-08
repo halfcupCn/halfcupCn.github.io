@@ -3,14 +3,19 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Halfcup的个人收藏</title>
+  <title>Realm Bugs | Halfcup的个人收藏</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Halfcup的个人收藏">
-<meta property="og:url" content="http://yoursite.com/index.html">
+  <meta name="description" content="Realm和DataBinding混用的一个小bug原本有一个实体类A，新加了一个类型为ArrayList&amp;lt;B&amp;gt;的字段，这个B内部有一个ArrayList&amp;lt;String&amp;gt;字段，然后编译发现抛出错误：java: Type java.util.List of field b is not supported；大致意思就是Realm不支持直接使用ArrayList&amp;lt;Stri">
+<meta name="keywords">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Realm Bugs">
+<meta property="og:url" content="http://yoursite.com/2017/05/08/realm&databinding/index.html">
 <meta property="og:site_name" content="Halfcup的个人收藏">
+<meta property="og:description" content="Realm和DataBinding混用的一个小bug原本有一个实体类A，新加了一个类型为ArrayList&amp;lt;B&amp;gt;的字段，这个B内部有一个ArrayList&amp;lt;String&amp;gt;字段，然后编译发现抛出错误：java: Type java.util.List of field b is not supported；大致意思就是Realm不支持直接使用ArrayList&amp;lt;Stri">
+<meta property="og:updated_time" content="2017-05-08T15:02:41.574Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Halfcup的个人收藏">
+<meta name="twitter:title" content="Realm Bugs">
+<meta name="twitter:description" content="Realm和DataBinding混用的一个小bug原本有一个实体类A，新加了一个类型为ArrayList&amp;lt;B&amp;gt;的字段，这个B内部有一个ArrayList&amp;lt;String&amp;gt;字段，然后编译发现抛出错误：java: Type java.util.List of field b is not supported；大致意思就是Realm不支持直接使用ArrayList&amp;lt;Stri">
   
     <link rel="alternate" href="/atom.xml" title="Halfcup的个人收藏" type="application/atom+xml">
   
@@ -59,9 +64,7 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-realm&amp;databinding" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-realm&amp;databinding" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/05/08/realm&databinding/" class="article-date">
   <time datetime="2017-05-08T14:26:35.495Z" itemprop="datePublished">2017-05-08</time>
@@ -74,8 +77,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/05/08/realm&databinding/">Realm Bugs</a>
+    <h1 class="article-title" itemprop="name">
+      Realm Bugs
     </h1>
   
 
@@ -96,93 +99,23 @@
     </footer>
   </div>
   
-</article>
-
-
+    
+<nav id="article-nav">
   
-    <article id="post-nesting" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/04/18/nesting/" class="article-date">
-  <time datetime="2017-04-18T13:35:08.000Z" itemprop="datePublished">2017-04-18</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
+    <a href="/2017/04/18/nesting/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/04/18/nesting/">nesting.md</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="NestedScrollingChild"><a href="#NestedScrollingChild" class="headerlink" title="NestedScrollingChild"></a>NestedScrollingChild</h1><p>利用NestedScrollingChild和SwipeRefreshLayout和LoadMoreRecyclerView实现EmptyView和上拉加载和下拉刷新</p>
-<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>上拉加载和下拉刷新都已经由 <a href="https://github.com/1030310877/LoadMoreRecyclerView" target="_blank" rel="external">LoadMoreRecyclerView</a>实现了，不过他这个还是有一些bug，我已经在具体使用的过程中修复过了，最后还缺少一个EmptyView的功能，正好最近在学习v4包中的NestedScrollingChild和NestedScrollingParent，就利用NestedScrollingChild实现了一个EmptyView。</p>
-<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/04/18/nesting/" data-id="cj2g9cnd50001psw2y4jjjvfc" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/04/10/hello-world/" class="article-date">
-  <time datetime="2017-04-10T12:59:15.594Z" itemprop="datePublished">2017-04-10</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
+          nesting.md
         
+      </div>
+    </a>
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/04/10/hello-world/">Hello World</a>
-    </h1>
   
+</nav>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/04/10/hello-world/" data-id="cj2g9cnd00000psw263teekj9" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
   
 </article>
-
-
-  
 
 </section>
         
