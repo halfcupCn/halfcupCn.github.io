@@ -3,19 +3,19 @@
 <head>
   <meta charset="utf-8">
   
-  <title>nesting.md | Halfcup的个人收藏</title>
+  <title>Halfcup的个人收藏</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="NestedScrollingChild利用NestedScrollingChild和SwipeRefreshLayout和LoadMoreRecyclerView实现EmptyView和上拉加载和下拉刷新 前言上拉加载和下拉刷新都已经由 LoadMoreRecyclerView实现了，不过他这个还是有一些bug，我已经在具体使用的过程中修复过了，最后还缺少一个EmptyView的功能，正好最近在">
+  <meta name="description" content="小提示，等有空了可以操作分类12345678android.support.design.widget.CollapsingToolbarLayout的层级问题有两个子View：A,B布局如下&amp;lt;CollapsingToolbarLayout&amp;gt;&amp;lt;A/&amp;gt;&amp;lt;B/&amp;gt;&amp;lt;/CollapsingToolbarLayout&amp;gt;如果此时设置layout_collapse">
 <meta name="keywords">
 <meta property="og:type" content="article">
-<meta property="og:title" content="nesting.md">
-<meta property="og:url" content="http://yoursite.com/2017/04/18/nesting/index.html">
+<meta property="og:title" content="Halfcup的个人收藏">
+<meta property="og:url" content="http://yoursite.com/2017/05/15/notice/index.html">
 <meta property="og:site_name" content="Halfcup的个人收藏">
-<meta property="og:description" content="NestedScrollingChild利用NestedScrollingChild和SwipeRefreshLayout和LoadMoreRecyclerView实现EmptyView和上拉加载和下拉刷新 前言上拉加载和下拉刷新都已经由 LoadMoreRecyclerView实现了，不过他这个还是有一些bug，我已经在具体使用的过程中修复过了，最后还缺少一个EmptyView的功能，正好最近在">
-<meta property="og:updated_time" content="2017-05-08T15:02:17.441Z">
+<meta property="og:description" content="小提示，等有空了可以操作分类12345678android.support.design.widget.CollapsingToolbarLayout的层级问题有两个子View：A,B布局如下&amp;lt;CollapsingToolbarLayout&amp;gt;&amp;lt;A/&amp;gt;&amp;lt;B/&amp;gt;&amp;lt;/CollapsingToolbarLayout&amp;gt;如果此时设置layout_collapse">
+<meta property="og:updated_time" content="2017-05-15T13:11:04.403Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="nesting.md">
-<meta name="twitter:description" content="NestedScrollingChild利用NestedScrollingChild和SwipeRefreshLayout和LoadMoreRecyclerView实现EmptyView和上拉加载和下拉刷新 前言上拉加载和下拉刷新都已经由 LoadMoreRecyclerView实现了，不过他这个还是有一些bug，我已经在具体使用的过程中修复过了，最后还缺少一个EmptyView的功能，正好最近在">
+<meta name="twitter:title" content="Halfcup的个人收藏">
+<meta name="twitter:description" content="小提示，等有空了可以操作分类12345678android.support.design.widget.CollapsingToolbarLayout的层级问题有两个子View：A,B布局如下&amp;lt;CollapsingToolbarLayout&amp;gt;&amp;lt;A/&amp;gt;&amp;lt;B/&amp;gt;&amp;lt;/CollapsingToolbarLayout&amp;gt;如果此时设置layout_collapse">
   
     <link rel="alternate" href="/atom.xml" title="Halfcup的个人收藏" type="application/atom+xml">
   
@@ -64,35 +64,25 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-nesting" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-notice" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/04/18/nesting/" class="article-date">
-  <time datetime="2017-04-18T13:35:08.000Z" itemprop="datePublished">2017-04-18</time>
+    <a href="/2017/05/15/notice/" class="article-date">
+  <time datetime="2017-05-15T12:37:50.254Z" itemprop="datePublished">2017-05-15</time>
 </a>
     
   </div>
   <div class="article-inner">
     
     
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      nesting.md
-    </h1>
-  
-
-      </header>
-    
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="NestedScrollingChild"><a href="#NestedScrollingChild" class="headerlink" title="NestedScrollingChild"></a>NestedScrollingChild</h1><p>利用NestedScrollingChild和SwipeRefreshLayout和LoadMoreRecyclerView实现EmptyView和上拉加载和下拉刷新</p>
-<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>上拉加载和下拉刷新都已经由 <a href="https://github.com/1030310877/LoadMoreRecyclerView" target="_blank" rel="external">LoadMoreRecyclerView</a>实现了，不过他这个还是有一些bug，我已经在具体使用的过程中修复过了，最后还缺少一个EmptyView的功能，正好最近在学习v4包中的NestedScrollingChild和NestedScrollingParent，就利用NestedScrollingChild实现了一个EmptyView。</p>
-<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2>
+        <h1 id="小提示，等有空了可以操作分类"><a href="#小提示，等有空了可以操作分类" class="headerlink" title="小提示，等有空了可以操作分类"></a>小提示，等有空了可以操作分类</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">android.support.design.widget.CollapsingToolbarLayout的层级问题</div><div class="line">有两个子View：A,B</div><div class="line">布局如下</div><div class="line">&lt;CollapsingToolbarLayout&gt;</div><div class="line">&lt;A/&gt;</div><div class="line">&lt;B/&gt;</div><div class="line">&lt;/CollapsingToolbarLayout&gt;</div><div class="line">如果此时设置layout_collapseMode=pin,那么B的内容会在A的上层</div></pre></td></tr></table></figure>
+<p><code>elevation只在有background时起作用</code></p>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/04/18/nesting/" data-id="cj2q5wqq50000zow2ivv3d9n9" class="article-share-link">Delen</a>
+      <a data-url="http://yoursite.com/2017/05/15/notice/" data-id="cj2q5wqqi0002zow29y8jhx7y" class="article-share-link">Delen</a>
       
       
     </footer>
@@ -101,20 +91,15 @@
     
 <nav id="article-nav">
   
-    <a href="/2017/04/10/hello-world/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2017/05/08/realm&databinding/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Nieuwer</strong>
       <div class="article-nav-title">
         
-          Hello World
+          Realm Bugs
         
       </div>
     </a>
   
-  
-    <a href="/2017/05/08/realm&databinding/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Ouder</strong>
-      <div class="article-nav-title">Realm Bugs</div>
-    </a>
   
 </nav>
 
