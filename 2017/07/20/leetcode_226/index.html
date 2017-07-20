@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>leetcode no.226 | Halfcup的个人收藏</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="大家都知道的Google拒绝HomeBrew作者的反转二叉树##说明 原本的二叉树如下：      4    /   \   2     7  / \   / \ 1   3 6   9 转换之后的二叉树如下：      4    /   \   7     2  / \   / \ 9   6 3   1 ##leetcode提供分析123456789/**  * Definition for">
+<meta name="keywords">
+<meta property="og:type" content="article">
+<meta property="og:title" content="leetcode no.226">
+<meta property="og:url" content="http://yoursite.com/2017/07/20/leetcode_226/index.html">
+<meta property="og:site_name" content="Halfcup的个人收藏">
+<meta property="og:description" content="大家都知道的Google拒绝HomeBrew作者的反转二叉树##说明 原本的二叉树如下：      4    /   \   2     7  / \   / \ 1   3 6   9 转换之后的二叉树如下：      4    /   \   7     2  / \   / \ 9   6 3   1 ##leetcode提供分析123456789/**  * Definition for">
+<meta property="og:updated_time" content="2017-07-20T14:23:38.759Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="leetcode no.226">
+<meta name="twitter:description" content="大家都知道的Google拒绝HomeBrew作者的反转二叉树##说明 原本的二叉树如下：      4    /   \   2     7  / \   / \ 1   3 6   9 转换之后的二叉树如下：      4    /   \   7     2  / \   / \ 9   6 3   1 ##leetcode提供分析123456789/**  * Definition for">
+  
+    <link rel="alternate" href="/atom.xml" title="Halfcup的个人收藏" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Halfcup的个人收藏</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-leetcode_226" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/07/20/leetcode_226/" class="article-date">
+  <time datetime="2017-07-20T13:19:00.000Z" itemprop="datePublished">2017-07-20</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      leetcode no.226
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="大家都知道的Google拒绝HomeBrew作者的反转二叉树"><a href="#大家都知道的Google拒绝HomeBrew作者的反转二叉树" class="headerlink" title="大家都知道的Google拒绝HomeBrew作者的反转二叉树"></a>大家都知道的Google拒绝HomeBrew作者的反转二叉树</h1><p>##说明</p>
+<p>原本的二叉树如下：</p>
+<pre><code>     4
+   /   \
+  2     7
+ / \   / \
+1   3 6   9
+</code></pre><p>转换之后的二叉树如下：</p>
+<pre><code>     4
+   /   \
+  7     2
+ / \   / \
+9   6 3   1
+</code></pre><p>##leetcode提供分析<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">  * Definition for a binary tree node.</div><div class="line">  * public class TreeNode &#123;</div><div class="line">  * int val;</div><div class="line">  * TreeNode left;</div><div class="line">  * TreeNode right;</div><div class="line">  * TreeNode(int x) &#123; val = x; &#125;</div><div class="line">  * &#125;</div><div class="line">  */</div></pre></td></tr></table></figure></p>
+<p>##具体分析<br>没啥好说的，每个节点都遍历之后交换子节点即可</p>
+<p>##具体实现(Java)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">public class Solution &#123;</div><div class="line">    public TreeNode invertTree(TreeNode root) &#123;</div><div class="line">        root = invert(root);</div><div class="line">        sout(root);</div><div class="line">        return root;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    private TreeNode invert(TreeNode node)&#123;</div><div class="line">        if(node != null )&#123;//&amp;&amp; node.left != null &amp;&amp; node.right != null</div><div class="line">            TreeNode tmp = node.left;</div><div class="line">            node.left = invert(node.right);</div><div class="line">            node.right = invert(tmp);</div><div class="line">        &#125;</div><div class="line">        return node;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    private String sout(TreeNode node)&#123;</div><div class="line">        if(node == null)&#123;</div><div class="line">            return &quot;null&quot;;</div><div class="line">        &#125;</div><div class="line">        StringBuilder builder = new StringBuilder();</div><div class="line">        builder.append(node.val).append(&quot;\n&quot;);</div><div class="line">        if(node.left != null)&#123;</div><div class="line">            builder.append(&quot;-&quot;).append(sout(node.left)).append(&quot;\n&quot;);</div><div class="line">        &#125;</div><div class="line">        if(node.right != null)&#123;</div><div class="line">            builder.append(&quot;-&quot;).append(sout(node.right)).append(&quot;\n&quot;);</div><div class="line">        &#125;</div><div class="line">        return builder.toString();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/07/20/leetcode_226/" data-id="cj5ckf4j1000348w2ac4jd3g0" class="article-share-link">Partager</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/05/15/notice/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Récent</strong>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Articles récents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/07/20/leetcode_226/">leetcode no.226</a>
+          </li>
+        
+          <li>
+            <a href="/2017/05/15/notice/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2017/05/08/realm&databinding/">Realm Bugs</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/18/nesting/">nesting.md</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/10/hello-world/">Hello World</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 halfcup<br>
+      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
