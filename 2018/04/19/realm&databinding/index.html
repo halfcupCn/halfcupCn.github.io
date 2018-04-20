@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Realm Bugs | Halfcup的个人收藏</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Realm和DataBinding混用的一个小bug原本有一个实体类A，新加了一个类型为ArrayList&amp;lt;B&amp;gt;的字段，这个B内部有一个ArrayList&amp;lt;String&amp;gt;字段，然后编译发现抛出错误：java: Type java.util.List&amp;lt;java.lang.String&amp;gt; of field b is not supported；大致意思就是Realm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Realm Bugs">
+<meta property="og:url" content="http://yoursite.com/2018/04/19/realm&databinding/index.html">
+<meta property="og:site_name" content="Halfcup的个人收藏">
+<meta property="og:description" content="Realm和DataBinding混用的一个小bug原本有一个实体类A，新加了一个类型为ArrayList&amp;lt;B&amp;gt;的字段，这个B内部有一个ArrayList&amp;lt;String&amp;gt;字段，然后编译发现抛出错误：java: Type java.util.List&amp;lt;java.lang.String&amp;gt; of field b is not supported；大致意思就是Realm">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-04-19T00:51:15.341Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Realm Bugs">
+<meta name="twitter:description" content="Realm和DataBinding混用的一个小bug原本有一个实体类A，新加了一个类型为ArrayList&amp;lt;B&amp;gt;的字段，这个B内部有一个ArrayList&amp;lt;String&amp;gt;字段，然后编译发现抛出错误：java: Type java.util.List&amp;lt;java.lang.String&amp;gt; of field b is not supported；大致意思就是Realm">
+  
+    <link rel="alternate" href="/atom.xml" title="Halfcup的个人收藏" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Halfcup的个人收藏</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-realm&amp;databinding" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/04/19/realm&databinding/" class="article-date">
+  <time datetime="2018-04-19T02:51:18.334Z" itemprop="datePublished">2018-04-19</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Realm Bugs
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Realm和DataBinding混用的一个小bug"><a href="#Realm和DataBinding混用的一个小bug" class="headerlink" title="Realm和DataBinding混用的一个小bug"></a>Realm和DataBinding混用的一个小bug</h1><h2 id="原本有一个实体类A，新加了一个类型为ArrayList-lt-B-gt-的字段，这个B内部有一个ArrayList-lt-String-gt-字段，然后编译发现抛出错误：java-Type-java-util-List-lt-java-lang-String-gt-of-field-b-is-not-supported；大致意思就是Realm不支持直接使用ArrayList-lt-String-gt-作为类的字段。"><a href="#原本有一个实体类A，新加了一个类型为ArrayList-lt-B-gt-的字段，这个B内部有一个ArrayList-lt-String-gt-字段，然后编译发现抛出错误：java-Type-java-util-List-lt-java-lang-String-gt-of-field-b-is-not-supported；大致意思就是Realm不支持直接使用ArrayList-lt-String-gt-作为类的字段。" class="headerlink" title="原本有一个实体类A，新加了一个类型为ArrayList&lt;B&gt;的字段，这个B内部有一个ArrayList&lt;String&gt;字段，然后编译发现抛出错误：java: Type java.util.List&lt;java.lang.String&gt; of field b is not supported；大致意思就是Realm不支持直接使用ArrayList&lt;String&gt;作为类的字段。"></a>原本有一个实体类A，新加了一个类型为<code>ArrayList&lt;B&gt;</code>的字段，这个B内部有一个<code>ArrayList&lt;String&gt;</code>字段，然后编译发现抛出错误：java: Type java.util.List&lt;java.lang.String&gt; of field b is not supported；大致意思就是Realm不支持直接使用<code>ArrayList&lt;String&gt;</code>作为类的字段。</h2><p>去到realm的github找到解决方案：采用<code>RealmList</code>代替<code>ArrayList</code>，新建一个<code>StringObject</code>继承<code>RealmObject</code>，这个StringObject只有一个<code>String</code>类型的字段，大致类似于<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">class StringObject extends RealmObject &#123;</span><br><span class="line">    @PrimaryKey</span><br><span class="line">    private String string;</span><br><span class="line">    //...getter &amp; setter</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="那么问题解决了么？并没有。编译依然抛出错误，错误变成了xxx-xxx-xxx-binding-not-found，大致意思就是没找到binding类，不过没有指明到哪一行。"><a href="#那么问题解决了么？并没有。编译依然抛出错误，错误变成了xxx-xxx-xxx-binding-not-found，大致意思就是没找到binding类，不过没有指明到哪一行。" class="headerlink" title="那么问题解决了么？并没有。编译依然抛出错误，错误变成了xxx.xxx.xxx.binding not found，大致意思就是没找到binding类，不过没有指明到哪一行。"></a>那么问题解决了么？并没有。编译依然抛出错误，错误变成了<code>xxx.xxx.xxx.binding not found</code>，大致意思就是没找到binding类，不过没有指明到哪一行。</h2><p>好，继续排查，没有指明到哪一行就多输出一点log吧，使用命令行手动编译<code>gradle assembleDebug --info --debug --stacktrace</code>，之后真正的问题出现了：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">A did not create a default no param constructor</span><br><span class="line">B did not create a default no param constructor</span><br><span class="line">StringObject did not create a default no param constructor</span><br></pre></td></tr></table></figure></p>
+<p>意思是没有添加一个默认的无参构造函数，那么直接添加上，编译通过，完毕。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/04/19/realm&databinding/" data-id="cjg6ac06f00027gutbnh7ikof" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/04/19/leetcode-492/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          leetcode no.492
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/04/19/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Hello World</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/algorithm/">algorithm</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/leetcode/" style="font-size: 10px;">leetcode</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/04/19/leetcode-598/">leetcode no.598</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/19/leetcode-492/">leetcode no.492</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/19/realm&databinding/">Realm Bugs</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/19/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/19/leetcode-42/">leetcode no.42</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 halfcup<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

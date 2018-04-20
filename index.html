@@ -9,6 +9,7 @@
 <meta property="og:title" content="Halfcup的个人收藏">
 <meta property="og:url" content="http://yoursite.com/index.html">
 <meta property="og:site_name" content="Halfcup的个人收藏">
+<meta property="og:locale" content="default">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Halfcup的个人收藏">
   
@@ -48,9 +49,9 @@
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
@@ -61,10 +62,113 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-leetcode_226" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-leetcode-598" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/07/20/leetcode_226/" class="article-date">
-  <time datetime="2017-07-20T13:19:00.000Z" itemprop="datePublished">2017-07-20</time>
+    <a href="/2018/04/19/leetcode-598/" class="article-date">
+  <time datetime="2018-04-19T05:43:19.000Z" itemprop="datePublished">2018-04-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/algorithm/">algorithm</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/19/leetcode-598/">leetcode no.598</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Range-Addition-II"><a href="#Range-Addition-II" class="headerlink" title="Range Addition II"></a>Range Addition II</h1><blockquote>
+<p>题目：<a href="https://leetcode.com/problems/range-addition-ii/description/" target="_blank" rel="noopener">https://leetcode.com/problems/range-addition-ii/description/</a></p>
+</blockquote>
+<h2 id="题目大意"><a href="#题目大意" class="headerlink" title="题目大意"></a>题目大意</h2><blockquote>
+<p>输入m，n生成<code>m*n</code>的矩阵M，默认用0填充<br>输入非负二维数组ops，对ops中的任意项<code>[a,b]</code>，凡是满足<code>0 &lt;= i &lt; a 和 0 &lt;= j &lt; b</code>的<code>M[i][j]</code>，<code>M[i][j]</code>加1，将ops视为对M的运算<br>当ops中的项执行完毕之后，统计M中最大元素出现的次数</p>
+</blockquote>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>因为ops中元素是非负数组，+1都是<code>M[0][0]</code>开始，那么只要找到最小的操作项，就可以找到最大值</p>
+<h2 id="实现代码"><a href="#实现代码" class="headerlink" title="实现代码"></a>实现代码</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">maxCount</span><span class="params">(self, m, n, ops)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :type m: int</span></span><br><span class="line"><span class="string">        :type n: int</span></span><br><span class="line"><span class="string">        :type ops: List[List[int]]</span></span><br><span class="line"><span class="string">        :rtype: int</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="keyword">if</span>(ops == <span class="keyword">None</span> <span class="keyword">or</span> len(ops)==<span class="number">0</span>):</span><br><span class="line">            <span class="keyword">return</span> m*n</span><br><span class="line">        x = [i[<span class="number">0</span>] <span class="keyword">for</span> i <span class="keyword">in</span> ops <span class="keyword">if</span> i[<span class="number">0</span>] &gt; <span class="number">0</span>]</span><br><span class="line">        y = [i[<span class="number">1</span>] <span class="keyword">for</span> i <span class="keyword">in</span> ops <span class="keyword">if</span> i[<span class="number">1</span>] &gt; <span class="number">0</span>]</span><br><span class="line">        <span class="keyword">return</span> min(x)*min(y)</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/04/19/leetcode-598/" data-id="cjg6ac06c00017gutf3cfmvyx" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-leetcode-492" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/04/19/leetcode-492/" class="article-date">
+  <time datetime="2018-04-19T05:26:44.000Z" itemprop="datePublished">2018-04-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/algorithm/">algorithm</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/19/leetcode-492/">leetcode no.492</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Construct-the-Rectangle"><a href="#Construct-the-Rectangle" class="headerlink" title="Construct the Rectangle"></a>Construct the Rectangle</h1><blockquote>
+<p>题目：<a href="https://leetcode.com/problems/construct-the-rectangle/description/" target="_blank" rel="noopener">https://leetcode.com/problems/construct-the-rectangle/description/</a></p>
+</blockquote>
+<h2 id="题目大意"><a href="#题目大意" class="headerlink" title="题目大意"></a>题目大意</h2><blockquote>
+<p>给定一个数n，找出一对数L，W，满足以下条件</p>
+<ol>
+<li>n = L * W</li>
+<li>L &gt;= W</li>
+<li>L和W的差别尽可能小</li>
+</ol>
+</blockquote>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>两数差异最小时两数相等，转换考虑为L平方=n，同时L和W必然为n的约数，问题即转换为求n的约数中积最小的，且最大约数不超过n/2</p>
+<h2 id="实现代码"><a href="#实现代码" class="headerlink" title="实现代码"></a>实现代码</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#infact it's a graphic description of how to get all divisors of a number</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">constructRectangle</span><span class="params">(self, area)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :type area: int</span></span><br><span class="line"><span class="string">        :rtype: List[int]</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="keyword">if</span>(area &lt;<span class="number">4</span>):</span><br><span class="line">            <span class="keyword">return</span> []</span><br><span class="line"></span><br><span class="line">        firstHalf = []</span><br><span class="line">        lastHalf = []</span><br><span class="line">        pair = []</span><br><span class="line"></span><br><span class="line">        halfArea = area/<span class="number">2</span>+<span class="number">1</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,halfArea):</span><br><span class="line">            mod = area % i</span><br><span class="line">            <span class="keyword">if</span>(mod == <span class="number">0</span>):</span><br><span class="line">                firstHalf.append(i)</span><br><span class="line">                lastHalf.append(area/i)</span><br><span class="line">                </span><br><span class="line">        lastHalf.reverse()</span><br><span class="line">        </span><br><span class="line">        pair = firstHalf+lastHalf</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> pair</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/04/19/leetcode-492/" data-id="cjg6ac06p00097gutgbarg84a" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-realm&amp;databinding" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/04/19/realm&databinding/" class="article-date">
+  <time datetime="2018-04-19T02:51:18.334Z" itemprop="datePublished">2018-04-19</time>
 </a>
     
   </div>
@@ -75,7 +179,227 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/07/20/leetcode_226/">leetcode no.226</a>
+      <a class="article-title" href="/2018/04/19/realm&databinding/">Realm Bugs</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Realm和DataBinding混用的一个小bug"><a href="#Realm和DataBinding混用的一个小bug" class="headerlink" title="Realm和DataBinding混用的一个小bug"></a>Realm和DataBinding混用的一个小bug</h1><h2 id="原本有一个实体类A，新加了一个类型为ArrayList-lt-B-gt-的字段，这个B内部有一个ArrayList-lt-String-gt-字段，然后编译发现抛出错误：java-Type-java-util-List-lt-java-lang-String-gt-of-field-b-is-not-supported；大致意思就是Realm不支持直接使用ArrayList-lt-String-gt-作为类的字段。"><a href="#原本有一个实体类A，新加了一个类型为ArrayList-lt-B-gt-的字段，这个B内部有一个ArrayList-lt-String-gt-字段，然后编译发现抛出错误：java-Type-java-util-List-lt-java-lang-String-gt-of-field-b-is-not-supported；大致意思就是Realm不支持直接使用ArrayList-lt-String-gt-作为类的字段。" class="headerlink" title="原本有一个实体类A，新加了一个类型为ArrayList&lt;B&gt;的字段，这个B内部有一个ArrayList&lt;String&gt;字段，然后编译发现抛出错误：java: Type java.util.List&lt;java.lang.String&gt; of field b is not supported；大致意思就是Realm不支持直接使用ArrayList&lt;String&gt;作为类的字段。"></a>原本有一个实体类A，新加了一个类型为<code>ArrayList&lt;B&gt;</code>的字段，这个B内部有一个<code>ArrayList&lt;String&gt;</code>字段，然后编译发现抛出错误：java: Type java.util.List&lt;java.lang.String&gt; of field b is not supported；大致意思就是Realm不支持直接使用<code>ArrayList&lt;String&gt;</code>作为类的字段。</h2><p>去到realm的github找到解决方案：采用<code>RealmList</code>代替<code>ArrayList</code>，新建一个<code>StringObject</code>继承<code>RealmObject</code>，这个StringObject只有一个<code>String</code>类型的字段，大致类似于<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">class StringObject extends RealmObject &#123;</span><br><span class="line">    @PrimaryKey</span><br><span class="line">    private String string;</span><br><span class="line">    //...getter &amp; setter</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="那么问题解决了么？并没有。编译依然抛出错误，错误变成了xxx-xxx-xxx-binding-not-found，大致意思就是没找到binding类，不过没有指明到哪一行。"><a href="#那么问题解决了么？并没有。编译依然抛出错误，错误变成了xxx-xxx-xxx-binding-not-found，大致意思就是没找到binding类，不过没有指明到哪一行。" class="headerlink" title="那么问题解决了么？并没有。编译依然抛出错误，错误变成了xxx.xxx.xxx.binding not found，大致意思就是没找到binding类，不过没有指明到哪一行。"></a>那么问题解决了么？并没有。编译依然抛出错误，错误变成了<code>xxx.xxx.xxx.binding not found</code>，大致意思就是没找到binding类，不过没有指明到哪一行。</h2><p>好，继续排查，没有指明到哪一行就多输出一点log吧，使用命令行手动编译<code>gradle assembleDebug --info --debug --stacktrace</code>，之后真正的问题出现了：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">A did not create a default no param constructor</span><br><span class="line">B did not create a default no param constructor</span><br><span class="line">StringObject did not create a default no param constructor</span><br></pre></td></tr></table></figure></p>
+<p>意思是没有添加一个默认的无参构造函数，那么直接添加上，编译通过，完毕。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/04/19/realm&databinding/" data-id="cjg6ac06f00027gutbnh7ikof" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/04/19/hello-world/" class="article-date">
+  <time datetime="2018-04-19T02:51:12.924Z" itemprop="datePublished">2018-04-19</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/19/hello-world/">Hello World</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/04/19/hello-world/" data-id="cjg6ac06600007gutphgk0c0n" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-leetcode-42" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/04/19/leetcode-42/" class="article-date">
+  <time datetime="2018-04-19T02:48:56.000Z" itemprop="datePublished">2018-04-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/algorithm/">algorithm</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/19/leetcode-42/">leetcode no.42</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Trapping-Rain-Water"><a href="#Trapping-Rain-Water" class="headerlink" title="Trapping Rain Water"></a>Trapping Rain Water</h1><blockquote>
+<p>题目：<a href="https://leetcode.com/problems/trapping-rain-water/description/" target="_blank" rel="noopener">https://leetcode.com/problems/trapping-rain-water/description/</a></p>
+</blockquote>
+<h2 id="题目大意"><a href="#题目大意" class="headerlink" title="题目大意"></a>题目大意</h2><blockquote>
+<p>Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it is able to trap after raining.</p>
+</blockquote>
+<blockquote>
+<p>给定n个非负整数组成的宽度为1的柱状图，计算凹陷里面能够盛多少水</p>
+</blockquote>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>上面的柱状图可以转换为二维数组，而根据木桶理论，能盛多少水是由最短边决定的，上面的问题转换为分割数组，按照数组内的非边界的最大值去分割，直到不可分割为止，最后计算数组可盛水的和即为整个图能盛水的量</p>
+<h2 id="实现代码"><a href="#实现代码" class="headerlink" title="实现代码"></a>实现代码</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">calculateDrop</span><span class="params">(self, simpleList)</span>:</span></span><br><span class="line">        <span class="keyword">if</span>(simpleList == <span class="keyword">None</span> <span class="keyword">or</span> len(simpleList) &lt; <span class="number">3</span>):</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">        sl = len(simpleList)</span><br><span class="line">        smaller = simpleList[sl -</span><br><span class="line">                             <span class="number">1</span>] <span class="keyword">if</span> simpleList[<span class="number">0</span>] &gt; simpleList[sl<span class="number">-1</span>] <span class="keyword">else</span> simpleList[<span class="number">0</span>]</span><br><span class="line">        total = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> current <span class="keyword">in</span> simpleList:</span><br><span class="line">            <span class="keyword">if</span> smaller &gt; current:</span><br><span class="line">                tmp = smaller-current</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                tmp = <span class="number">0</span></span><br><span class="line">            total += tmp</span><br><span class="line">        <span class="keyword">return</span> total</span><br><span class="line"></span><br><span class="line">    <span class="comment"># if perfect to calculate drop return above 0 else 0</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">perfect</span><span class="params">(self, data)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> data == <span class="keyword">None</span> <span class="keyword">or</span> len(data) &lt; <span class="number">3</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="number">2</span></span><br><span class="line">        newList = list(data)</span><br><span class="line">        newList.sort()</span><br><span class="line">        length = len(newList)</span><br><span class="line">        <span class="keyword">if</span> ((data[<span class="number">0</span>] == newList[length<span class="number">-1</span>] <span class="keyword">and</span> data[length<span class="number">-1</span>] == newList[length<span class="number">-2</span>]) <span class="keyword">or</span>(data[<span class="number">0</span>] == newList[length<span class="number">-2</span>] <span class="keyword">and</span> data[length<span class="number">-1</span>] == newList[length<span class="number">-1</span>])):</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># split list by max of origin</span></span><br><span class="line">    <span class="comment"># left --- right &amp; max</span></span><br><span class="line">    <span class="comment"># left == max , if right == max return origin else try subList[1:len]</span></span><br><span class="line">    <span class="comment"># left != max , if right == max try subList[0:len-1] else try origin</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">splitByMax</span><span class="params">(self, originList)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> (originList == <span class="keyword">None</span> <span class="keyword">or</span> len(originList)&lt;<span class="number">3</span>):</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">None</span></span><br><span class="line">        <span class="keyword">if</span>(self.perfect(originList) == <span class="number">1</span>):</span><br><span class="line">            <span class="keyword">return</span> [originList]</span><br><span class="line">        originLen = len(originList)</span><br><span class="line">        left = originList[<span class="number">0</span>]</span><br><span class="line">        right = originList[<span class="number">-1</span>]</span><br><span class="line">        maxNum = max(originList)</span><br><span class="line">        <span class="keyword">if</span>(left == maxNum):</span><br><span class="line">            <span class="keyword">if</span> (right == maxNum):</span><br><span class="line">                <span class="keyword">return</span> [originList]</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                subList = originList[<span class="number">1</span>:originLen]</span><br><span class="line">        <span class="keyword">elif</span>(right == maxNum):</span><br><span class="line">            subList = originList[<span class="number">0</span>:originLen<span class="number">-1</span>]</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            subList = list(originList)</span><br><span class="line">        <span class="comment">#reset max</span></span><br><span class="line">        maxNum = max(subList)</span><br><span class="line">        </span><br><span class="line">        indexed = [index <span class="keyword">for</span> index,num <span class="keyword">in</span> enumerate(originList) <span class="keyword">if</span> num == maxNum]</span><br><span class="line">        <span class="comment">#split by index &amp; add extra index when split finished</span></span><br><span class="line">        simpleResult = []</span><br><span class="line">        <span class="keyword">for</span> index,pos <span class="keyword">in</span> enumerate(indexed):</span><br><span class="line">            <span class="keyword">if</span> index == <span class="number">0</span>:</span><br><span class="line">                rs = originList[<span class="number">0</span>:pos+<span class="number">1</span>]</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                rs = originList[indexed[index<span class="number">-1</span>]:pos+<span class="number">1</span>]</span><br><span class="line">            rsPerfct = self.perfect(rs)</span><br><span class="line">            <span class="keyword">if</span>(rsPerfct == <span class="number">1</span>):</span><br><span class="line">                simpleResult.append(rs)</span><br><span class="line">            <span class="keyword">elif</span>(rsPerfct == <span class="number">0</span>):</span><br><span class="line">                simpleResult+=self.splitByMax(rs)</span><br><span class="line">        lastList = originList[indexed[<span class="number">-1</span>]:originLen]</span><br><span class="line">        lastPerfct = self.perfect(lastList)</span><br><span class="line">        <span class="keyword">if</span>(lastPerfct == <span class="number">1</span>):</span><br><span class="line">            simpleResult.append(lastList)</span><br><span class="line">        <span class="keyword">elif</span>(lastPerfct == <span class="number">0</span>):</span><br><span class="line">            simpleResult+=self.splitByMax(lastList)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> simpleResult</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">trap</span><span class="params">(self, originList)</span>:</span></span><br><span class="line">        <span class="keyword">if</span>(originList == <span class="keyword">None</span> <span class="keyword">or</span> len(originList) &lt; <span class="number">3</span>):</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            total = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">            rs = self.splitByMax(originList)</span><br><span class="line">            <span class="keyword">for</span> l <span class="keyword">in</span> rs:</span><br><span class="line">                total += self.calculateDrop(l)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> total</span><br></pre></td></tr></table></figure>
+<h2 id="简单测试用例"><a href="#简单测试用例" class="headerlink" title="简单测试用例"></a>简单测试用例</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">data = [<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>]</span><br><span class="line">s = Solution()</span><br><span class="line">total = s.trap(data)</span><br><span class="line"></span><br><span class="line">print(total)</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/04/19/leetcode-42/" data-id="cjg6ac06r000a7guth4hqyfvj" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-notice" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/04/19/notice/" class="article-date">
+  <time datetime="2018-04-19T00:51:15.339Z" itemprop="datePublished">2018-04-19</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="小提示，等有空了可以操作分类"><a href="#小提示，等有空了可以操作分类" class="headerlink" title="小提示，等有空了可以操作分类"></a>小提示，等有空了可以操作分类</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">android.support.design.widget.CollapsingToolbarLayout的层级问题</span><br><span class="line">有两个子View：A,B</span><br><span class="line">布局如下</span><br><span class="line">&lt;CollapsingToolbarLayout&gt;</span><br><span class="line">&lt;A/&gt;</span><br><span class="line">&lt;B/&gt;</span><br><span class="line">&lt;/CollapsingToolbarLayout&gt;</span><br><span class="line">如果此时设置layout_collapseMode=pin,那么B的内容会在A的上层</span><br></pre></td></tr></table></figure>
+<p><code>elevation只在有background时起作用</code></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/04/19/notice/" data-id="cjg6ac06m00067gutq0aw61dx" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-RxJava操作符使用1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/09/05/RxJava操作符使用1/" class="article-date">
+  <time datetime="2017-09-05T12:51:21.000Z" itemprop="datePublished">2017-09-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/05/RxJava操作符使用1/">RxJava操作符使用1</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>RxJava用了很久了，但是一直都是最简单的<code>flatMap</code>或者<code>just</code>、<code>from</code>、<code>foreach</code>这种简单的操作符就完毕了，很难用到其他的操作符，等到用到的时候再去查又有一点太晚了，所以这次干脆就一次性全部都看看到底都是些什么操作符和作用。</p>
+</blockquote>
+<p><em>这些操作符都只针对当前我使用的版本：RxAndroid 1.1.2-RxJava 1.1.6来介绍，源文档来自<a href="http://reactivex.io/documentation/operators.html#categorized" target="_blank" rel="noopener">Rx官方文档</a></em></p>
+<h1 id="创建Observables"><a href="#创建Observables" class="headerlink" title="创建Observables"></a>创建Observables</h1><p>顾名思义，所有下列操作符都会创建Observable<strong>s</strong></p>
+<h2 id="Create"><a href="#Create" class="headerlink" title="Create"></a>Create</h2><blockquote>
+<p>create an Observable from scratch by calling observer methods programmatically<br>意思是调用observer的方法从头创建<strong>一个</strong>Observable</p>
+</blockquote>
+<p>示例代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">Observable.create(new Observable.OnSubscribe&lt;Integer&gt;() &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void call(Subscriber&lt;? super Integer&gt; observer) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            if (!observer.isUnsubscribed()) &#123;</span><br><span class="line">                for (int i = 1; i &lt; 5; i++) &#123;</span><br><span class="line">                    observer.onNext(i);</span><br><span class="line">                &#125;</span><br><span class="line">                observer.onCompleted();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            observer.onError(e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"> &#125; ).subscribe(new Subscriber&lt;Integer&gt;() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void onNext(Integer item) &#123;</span><br><span class="line">            System.out.println(&quot;Next: &quot; + item);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void onError(Throwable error) &#123;</span><br><span class="line">            System.err.println(&quot;Error: &quot; + error.getMessage());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void onCompleted() &#123;</span><br><span class="line">            System.out.println(&quot;Sequence complete.&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure>
+<p>用Create操作符可以从头创建一个Observable，传递给这个Observable一个接收observer作为它的参数的方法，在这个方法体内按合适的顺序调用<code>onNext</code>，<code>onError</code>，<code>onCompleted</code>来让这个方法成为一个正确的的Observable-其中<code>onCompleted</code>和<code>onErrir</code>至少执行一个，并且它们之后不要再调用这个Observable的其它方法。</p>
+<h2 id="Defer"><a href="#Defer" class="headerlink" title="Defer"></a>Defer</h2><blockquote>
+<p>当observer订阅时，给每个observer创建一个新的Observable</p>
+</blockquote>
+<p>示例代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/09/05/RxJava操作符使用1/" data-id="cjg6ac06n00077gut72fpo62m" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-leetcode-226" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/07/20/leetcode-226/" class="article-date">
+  <time datetime="2017-07-20T13:19:00.000Z" itemprop="datePublished">2017-07-20</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/algorithm/">algorithm</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/07/20/leetcode-226/">leetcode no.226</a>
     </h1>
   
 
@@ -96,83 +420,18 @@
   7     2
  / \   / \
 9   6 3   1
-</code></pre><p>##leetcode提供分析<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">  * Definition for a binary tree node.</div><div class="line">  * public class TreeNode &#123;</div><div class="line">  * int val;</div><div class="line">  * TreeNode left;</div><div class="line">  * TreeNode right;</div><div class="line">  * TreeNode(int x) &#123; val = x; &#125;</div><div class="line">  * &#125;</div><div class="line">  */</div></pre></td></tr></table></figure></p>
+</code></pre><p>##leetcode提供分析<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">  * Definition for a binary tree node.</span><br><span class="line">  * public class TreeNode &#123;</span><br><span class="line">  * int val;</span><br><span class="line">  * TreeNode left;</span><br><span class="line">  * TreeNode right;</span><br><span class="line">  * TreeNode(int x) &#123; val = x; &#125;</span><br><span class="line">  * &#125;</span><br><span class="line">  */</span><br></pre></td></tr></table></figure></p>
 <p>##具体分析<br>没啥好说的，每个节点都遍历之后交换子节点即可</p>
-<p>##具体实现(Java)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">public class Solution &#123;</div><div class="line">    public TreeNode invertTree(TreeNode root) &#123;</div><div class="line">        root = invert(root);</div><div class="line">        sout(root);</div><div class="line">        return root;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    private TreeNode invert(TreeNode node)&#123;</div><div class="line">        if(node != null )&#123;//&amp;&amp; node.left != null &amp;&amp; node.right != null</div><div class="line">            TreeNode tmp = node.left;</div><div class="line">            node.left = invert(node.right);</div><div class="line">            node.right = invert(tmp);</div><div class="line">        &#125;</div><div class="line">        return node;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    private String sout(TreeNode node)&#123;</div><div class="line">        if(node == null)&#123;</div><div class="line">            return &quot;null&quot;;</div><div class="line">        &#125;</div><div class="line">        StringBuilder builder = new StringBuilder();</div><div class="line">        builder.append(node.val).append(&quot;\n&quot;);</div><div class="line">        if(node.left != null)&#123;</div><div class="line">            builder.append(&quot;-&quot;).append(sout(node.left)).append(&quot;\n&quot;);</div><div class="line">        &#125;</div><div class="line">        if(node.right != null)&#123;</div><div class="line">            builder.append(&quot;-&quot;).append(sout(node.right)).append(&quot;\n&quot;);</div><div class="line">        &#125;</div><div class="line">        return builder.toString();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>##具体实现(Java)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">public class Solution &#123;</span><br><span class="line">    public TreeNode invertTree(TreeNode root) &#123;</span><br><span class="line">        root = invert(root);</span><br><span class="line">        sout(root);</span><br><span class="line">        return root;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    private TreeNode invert(TreeNode node)&#123;</span><br><span class="line">        if(node != null )&#123;//&amp;&amp; node.left != null &amp;&amp; node.right != null</span><br><span class="line">            TreeNode tmp = node.left;</span><br><span class="line">            node.left = invert(node.right);</span><br><span class="line">            node.right = invert(tmp);</span><br><span class="line">        &#125;</span><br><span class="line">        return node;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    private String sout(TreeNode node)&#123;</span><br><span class="line">        if(node == null)&#123;</span><br><span class="line">            return &quot;null&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">        StringBuilder builder = new StringBuilder();</span><br><span class="line">        builder.append(node.val).append(&quot;\n&quot;);</span><br><span class="line">        if(node.left != null)&#123;</span><br><span class="line">            builder.append(&quot;-&quot;).append(sout(node.left)).append(&quot;\n&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        if(node.right != null)&#123;</span><br><span class="line">            builder.append(&quot;-&quot;).append(sout(node.right)).append(&quot;\n&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        return builder.toString();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/07/20/leetcode_226/" data-id="cj5ckf4j1000348w2ac4jd3g0" class="article-share-link">Partager</a>
+      <a data-url="http://yoursite.com/2017/07/20/leetcode-226/" data-id="cjg6ac06t000d7gut8j5vt6zc" class="article-share-link">Share</a>
       
       
-    </footer>
-  </div>
-  
-</article>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
 
-
-  
-    <article id="post-notice" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/05/15/notice/" class="article-date">
-  <time datetime="2017-05-15T12:37:50.254Z" itemprop="datePublished">2017-05-15</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="小提示，等有空了可以操作分类"><a href="#小提示，等有空了可以操作分类" class="headerlink" title="小提示，等有空了可以操作分类"></a>小提示，等有空了可以操作分类</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">android.support.design.widget.CollapsingToolbarLayout的层级问题</div><div class="line">有两个子View：A,B</div><div class="line">布局如下</div><div class="line">&lt;CollapsingToolbarLayout&gt;</div><div class="line">&lt;A/&gt;</div><div class="line">&lt;B/&gt;</div><div class="line">&lt;/CollapsingToolbarLayout&gt;</div><div class="line">如果此时设置layout_collapseMode=pin,那么B的内容会在A的上层</div></pre></td></tr></table></figure>
-<p><code>elevation只在有background时起作用</code></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/05/15/notice/" data-id="cj5ckf4j2000448w2xpli6q57" class="article-share-link">Partager</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-realm&amp;databinding" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/05/08/realm&databinding/" class="article-date">
-  <time datetime="2017-05-08T14:26:35.495Z" itemprop="datePublished">2017-05-08</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/05/08/realm&databinding/">Realm Bugs</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Realm和DataBinding混用的一个小bug"><a href="#Realm和DataBinding混用的一个小bug" class="headerlink" title="Realm和DataBinding混用的一个小bug"></a>Realm和DataBinding混用的一个小bug</h1><h2 id="原本有一个实体类A，新加了一个类型为ArrayList-lt-B-gt-的字段，这个B内部有一个ArrayList-lt-String-gt-字段，然后编译发现抛出错误：java-Type-java-util-List-of-field-b-is-not-supported；大致意思就是Realm不支持直接使用ArrayList-lt-String-gt-作为类的字段。"><a href="#原本有一个实体类A，新加了一个类型为ArrayList-lt-B-gt-的字段，这个B内部有一个ArrayList-lt-String-gt-字段，然后编译发现抛出错误：java-Type-java-util-List-of-field-b-is-not-supported；大致意思就是Realm不支持直接使用ArrayList-lt-String-gt-作为类的字段。" class="headerlink" title="原本有一个实体类A，新加了一个类型为ArrayList&lt;B&gt;的字段，这个B内部有一个ArrayList&lt;String&gt;字段，然后编译发现抛出错误：java: Type java.util.List of field b is not supported；大致意思就是Realm不支持直接使用ArrayList&lt;String&gt;作为类的字段。"></a>原本有一个实体类A，新加了一个类型为<code>ArrayList&lt;B&gt;</code>的字段，这个B内部有一个<code>ArrayList&lt;String&gt;</code>字段，然后编译发现抛出错误：java: Type java.util.List<java.lang.string> of field b is not supported；大致意思就是Realm不支持直接使用<code>ArrayList&lt;String&gt;</code>作为类的字段。</java.lang.string></h2><p>去到realm的github找到解决方案：采用<code>RealmList</code>代替<code>ArrayList</code>，新建一个<code>StringObject</code>继承<code>RealmObject</code>，这个StringObject只有一个<code>String</code>类型的字段，大致类似于<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">class StringObject extends RealmObject &#123;</div><div class="line">    @PrimaryKey</div><div class="line">    private String string;</div><div class="line">    //...getter &amp; setter</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h2 id="那么问题解决了么？并没有。编译依然抛出错误，错误变成了xxx-xxx-xxx-binding-not-found，大致意思就是没找到binding类，不过没有指明到哪一行。"><a href="#那么问题解决了么？并没有。编译依然抛出错误，错误变成了xxx-xxx-xxx-binding-not-found，大致意思就是没找到binding类，不过没有指明到哪一行。" class="headerlink" title="那么问题解决了么？并没有。编译依然抛出错误，错误变成了xxx.xxx.xxx.binding not found，大致意思就是没找到binding类，不过没有指明到哪一行。"></a>那么问题解决了么？并没有。编译依然抛出错误，错误变成了<code>xxx.xxx.xxx.binding not found</code>，大致意思就是没找到binding类，不过没有指明到哪一行。</h2><p>好，继续排查，没有指明到哪一行就多输出一点log吧，使用命令行手动编译<code>gradle assembleDebug --info --debug --stacktrace</code>，之后真正的问题出现了：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">A did not create a default no param constructor</div><div class="line">B did not create a default no param constructor</div><div class="line">StringObject did not create a default no param constructor</div></pre></td></tr></table></figure></p>
-<p>意思是没有添加一个默认的无参构造函数，那么直接添加上，编译通过，完毕。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/05/08/realm&databinding/" data-id="cj5ckf4ir000048w2bq09symp" class="article-share-link">Partager</a>
-      
-      
     </footer>
   </div>
   
@@ -203,57 +462,12 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h1 id="NestedScrollingChild"><a href="#NestedScrollingChild" class="headerlink" title="NestedScrollingChild"></a>NestedScrollingChild</h1><p>利用NestedScrollingChild和SwipeRefreshLayout和LoadMoreRecyclerView实现EmptyView和上拉加载和下拉刷新</p>
-<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>上拉加载和下拉刷新都已经由 <a href="https://github.com/1030310877/LoadMoreRecyclerView" target="_blank" rel="external">LoadMoreRecyclerView</a>实现了，不过他这个还是有一些bug，我已经在具体使用的过程中修复过了，最后还缺少一个EmptyView的功能，正好最近在学习v4包中的NestedScrollingChild和NestedScrollingParent，就利用NestedScrollingChild实现了一个EmptyView。</p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>上拉加载和下拉刷新都已经由 <a href="https://github.com/1030310877/LoadMoreRecyclerView" target="_blank" rel="noopener">LoadMoreRecyclerView</a>实现了，不过他这个还是有一些bug，我已经在具体使用的过程中修复过了，最后还缺少一个EmptyView的功能，正好最近在学习v4包中的NestedScrollingChild和NestedScrollingParent，就利用NestedScrollingChild实现了一个EmptyView。</p>
 <h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/04/18/nesting/" data-id="cj5ckf4iz000248w2akfjph5s" class="article-share-link">Partager</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/04/10/hello-world/" class="article-date">
-  <time datetime="2017-04-10T12:59:15.594Z" itemprop="datePublished">2017-04-10</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/04/10/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/04/10/hello-world/" data-id="cj5ckf4ix000148w24ijcu8qt" class="article-share-link">Partager</a>
+      <a data-url="http://yoursite.com/2017/04/18/nesting/" data-id="cjg6ac06k00057gutegmezg1z" class="article-share-link">Share</a>
       
       
     </footer>
@@ -269,18 +483,10 @@
           <aside id="sidebar">
   
     
-
-  
-    
-
-  
-    
-  
-    
   <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
+    <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/algorithm/">algorithm</a></li></ul>
     </div>
   </div>
 
@@ -288,28 +494,57 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Articles récents</h3>
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/leetcode/" style="font-size: 10px;">leetcode</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
         
           <li>
-            <a href="/2017/07/20/leetcode_226/">leetcode no.226</a>
+            <a href="/2018/04/19/leetcode-598/">leetcode no.598</a>
           </li>
         
           <li>
-            <a href="/2017/05/15/notice/">(no title)</a>
+            <a href="/2018/04/19/leetcode-492/">leetcode no.492</a>
           </li>
         
           <li>
-            <a href="/2017/05/08/realm&databinding/">Realm Bugs</a>
+            <a href="/2018/04/19/realm&databinding/">Realm Bugs</a>
           </li>
         
           <li>
-            <a href="/2017/04/18/nesting/">nesting.md</a>
+            <a href="/2018/04/19/hello-world/">Hello World</a>
           </li>
         
           <li>
-            <a href="/2017/04/10/hello-world/">Hello World</a>
+            <a href="/2018/04/19/leetcode-42/">leetcode no.42</a>
           </li>
         
       </ul>
@@ -324,8 +559,8 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2017 halfcup<br>
-      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      &copy; 2018 halfcup<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>

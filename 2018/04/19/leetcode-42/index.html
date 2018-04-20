@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>leetcode no.42 | Halfcup的个人收藏</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Trapping Rain Water 题目：https://leetcode.com/problems/trapping-rain-water/description/  题目大意 Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how mu">
+<meta name="keywords" content="leetcode">
+<meta property="og:type" content="article">
+<meta property="og:title" content="leetcode no.42">
+<meta property="og:url" content="http://yoursite.com/2018/04/19/leetcode-42/index.html">
+<meta property="og:site_name" content="Halfcup的个人收藏">
+<meta property="og:description" content="Trapping Rain Water 题目：https://leetcode.com/problems/trapping-rain-water/description/  题目大意 Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how mu">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-04-19T07:09:09.722Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="leetcode no.42">
+<meta name="twitter:description" content="Trapping Rain Water 题目：https://leetcode.com/problems/trapping-rain-water/description/  题目大意 Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how mu">
+  
+    <link rel="alternate" href="/atom.xml" title="Halfcup的个人收藏" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Halfcup的个人收藏</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-leetcode-42" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/04/19/leetcode-42/" class="article-date">
+  <time datetime="2018-04-19T02:48:56.000Z" itemprop="datePublished">2018-04-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/algorithm/">algorithm</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      leetcode no.42
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Trapping-Rain-Water"><a href="#Trapping-Rain-Water" class="headerlink" title="Trapping Rain Water"></a>Trapping Rain Water</h1><blockquote>
+<p>题目：<a href="https://leetcode.com/problems/trapping-rain-water/description/" target="_blank" rel="noopener">https://leetcode.com/problems/trapping-rain-water/description/</a></p>
+</blockquote>
+<h2 id="题目大意"><a href="#题目大意" class="headerlink" title="题目大意"></a>题目大意</h2><blockquote>
+<p>Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it is able to trap after raining.</p>
+</blockquote>
+<blockquote>
+<p>给定n个非负整数组成的宽度为1的柱状图，计算凹陷里面能够盛多少水</p>
+</blockquote>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>上面的柱状图可以转换为二维数组，而根据木桶理论，能盛多少水是由最短边决定的，上面的问题转换为分割数组，按照数组内的非边界的最大值去分割，直到不可分割为止，最后计算数组可盛水的和即为整个图能盛水的量</p>
+<h2 id="实现代码"><a href="#实现代码" class="headerlink" title="实现代码"></a>实现代码</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">calculateDrop</span><span class="params">(self, simpleList)</span>:</span></span><br><span class="line">        <span class="keyword">if</span>(simpleList == <span class="keyword">None</span> <span class="keyword">or</span> len(simpleList) &lt; <span class="number">3</span>):</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">        sl = len(simpleList)</span><br><span class="line">        smaller = simpleList[sl -</span><br><span class="line">                             <span class="number">1</span>] <span class="keyword">if</span> simpleList[<span class="number">0</span>] &gt; simpleList[sl<span class="number">-1</span>] <span class="keyword">else</span> simpleList[<span class="number">0</span>]</span><br><span class="line">        total = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> current <span class="keyword">in</span> simpleList:</span><br><span class="line">            <span class="keyword">if</span> smaller &gt; current:</span><br><span class="line">                tmp = smaller-current</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                tmp = <span class="number">0</span></span><br><span class="line">            total += tmp</span><br><span class="line">        <span class="keyword">return</span> total</span><br><span class="line"></span><br><span class="line">    <span class="comment"># if perfect to calculate drop return above 0 else 0</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">perfect</span><span class="params">(self, data)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> data == <span class="keyword">None</span> <span class="keyword">or</span> len(data) &lt; <span class="number">3</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="number">2</span></span><br><span class="line">        newList = list(data)</span><br><span class="line">        newList.sort()</span><br><span class="line">        length = len(newList)</span><br><span class="line">        <span class="keyword">if</span> ((data[<span class="number">0</span>] == newList[length<span class="number">-1</span>] <span class="keyword">and</span> data[length<span class="number">-1</span>] == newList[length<span class="number">-2</span>]) <span class="keyword">or</span>(data[<span class="number">0</span>] == newList[length<span class="number">-2</span>] <span class="keyword">and</span> data[length<span class="number">-1</span>] == newList[length<span class="number">-1</span>])):</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># split list by max of origin</span></span><br><span class="line">    <span class="comment"># left --- right &amp; max</span></span><br><span class="line">    <span class="comment"># left == max , if right == max return origin else try subList[1:len]</span></span><br><span class="line">    <span class="comment"># left != max , if right == max try subList[0:len-1] else try origin</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">splitByMax</span><span class="params">(self, originList)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> (originList == <span class="keyword">None</span> <span class="keyword">or</span> len(originList)&lt;<span class="number">3</span>):</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">None</span></span><br><span class="line">        <span class="keyword">if</span>(self.perfect(originList) == <span class="number">1</span>):</span><br><span class="line">            <span class="keyword">return</span> [originList]</span><br><span class="line">        originLen = len(originList)</span><br><span class="line">        left = originList[<span class="number">0</span>]</span><br><span class="line">        right = originList[<span class="number">-1</span>]</span><br><span class="line">        maxNum = max(originList)</span><br><span class="line">        <span class="keyword">if</span>(left == maxNum):</span><br><span class="line">            <span class="keyword">if</span> (right == maxNum):</span><br><span class="line">                <span class="keyword">return</span> [originList]</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                subList = originList[<span class="number">1</span>:originLen]</span><br><span class="line">        <span class="keyword">elif</span>(right == maxNum):</span><br><span class="line">            subList = originList[<span class="number">0</span>:originLen<span class="number">-1</span>]</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            subList = list(originList)</span><br><span class="line">        <span class="comment">#reset max</span></span><br><span class="line">        maxNum = max(subList)</span><br><span class="line">        </span><br><span class="line">        indexed = [index <span class="keyword">for</span> index,num <span class="keyword">in</span> enumerate(originList) <span class="keyword">if</span> num == maxNum]</span><br><span class="line">        <span class="comment">#split by index &amp; add extra index when split finished</span></span><br><span class="line">        simpleResult = []</span><br><span class="line">        <span class="keyword">for</span> index,pos <span class="keyword">in</span> enumerate(indexed):</span><br><span class="line">            <span class="keyword">if</span> index == <span class="number">0</span>:</span><br><span class="line">                rs = originList[<span class="number">0</span>:pos+<span class="number">1</span>]</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                rs = originList[indexed[index<span class="number">-1</span>]:pos+<span class="number">1</span>]</span><br><span class="line">            rsPerfct = self.perfect(rs)</span><br><span class="line">            <span class="keyword">if</span>(rsPerfct == <span class="number">1</span>):</span><br><span class="line">                simpleResult.append(rs)</span><br><span class="line">            <span class="keyword">elif</span>(rsPerfct == <span class="number">0</span>):</span><br><span class="line">                simpleResult+=self.splitByMax(rs)</span><br><span class="line">        lastList = originList[indexed[<span class="number">-1</span>]:originLen]</span><br><span class="line">        lastPerfct = self.perfect(lastList)</span><br><span class="line">        <span class="keyword">if</span>(lastPerfct == <span class="number">1</span>):</span><br><span class="line">            simpleResult.append(lastList)</span><br><span class="line">        <span class="keyword">elif</span>(lastPerfct == <span class="number">0</span>):</span><br><span class="line">            simpleResult+=self.splitByMax(lastList)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> simpleResult</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">trap</span><span class="params">(self, originList)</span>:</span></span><br><span class="line">        <span class="keyword">if</span>(originList == <span class="keyword">None</span> <span class="keyword">or</span> len(originList) &lt; <span class="number">3</span>):</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            total = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">            rs = self.splitByMax(originList)</span><br><span class="line">            <span class="keyword">for</span> l <span class="keyword">in</span> rs:</span><br><span class="line">                total += self.calculateDrop(l)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> total</span><br></pre></td></tr></table></figure>
+<h2 id="简单测试用例"><a href="#简单测试用例" class="headerlink" title="简单测试用例"></a>简单测试用例</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">data = [<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>]</span><br><span class="line">s = Solution()</span><br><span class="line">total = s.trap(data)</span><br><span class="line"></span><br><span class="line">print(total)</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/04/19/leetcode-42/" data-id="cjg6ac06r000a7guth4hqyfvj" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/04/19/hello-world/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Hello World
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/04/19/notice/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title"></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/algorithm/">algorithm</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/leetcode/" style="font-size: 10px;">leetcode</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/04/19/leetcode-598/">leetcode no.598</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/19/leetcode-492/">leetcode no.492</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/19/realm&databinding/">Realm Bugs</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/19/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/19/leetcode-42/">leetcode no.42</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 halfcup<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
