@@ -3,14 +3,19 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Archives: 2017/4 | Halfcup的个人收藏</title>
+  <title>Halfcup的个人收藏</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
+  <meta name="description" content="MVP使用感受花了一个月时间去外包感受了一下外包的氛围，意外居然碰到了使用MVP的项目，正好使用一下，以弥补之前没用上的遗憾，顺带说一下感受 使用 m-&amp;gt;model，基本上是实体类 v-&amp;gt;view，对界面的操作封装，一般是Activity或者Fragment来实现 p-&amp;gt;presenter，业务逻辑的封装层，一般持有view的实例，以便刷新界面  经验之谈 对v来说，有需要的话可">
+<meta name="keywords">
+<meta property="og:type" content="article">
 <meta property="og:title" content="Halfcup的个人收藏">
-<meta property="og:url" content="http://yoursite.com/archives/2017/04/index.html">
+<meta property="og:url" content="http://yoursite.com/2018/08/26/mvp实战感受/index.html">
 <meta property="og:site_name" content="Halfcup的个人收藏">
+<meta property="og:description" content="MVP使用感受花了一个月时间去外包感受了一下外包的氛围，意外居然碰到了使用MVP的项目，正好使用一下，以弥补之前没用上的遗憾，顺带说一下感受 使用 m-&amp;gt;model，基本上是实体类 v-&amp;gt;view，对界面的操作封装，一般是Activity或者Fragment来实现 p-&amp;gt;presenter，业务逻辑的封装层，一般持有view的实例，以便刷新界面  经验之谈 对v来说，有需要的话可">
+<meta property="og:updated_time" content="2018-08-26T14:28:00.245Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Halfcup的个人收藏">
+<meta name="twitter:description" content="MVP使用感受花了一个月时间去外包感受了一下外包的氛围，意外居然碰到了使用MVP的项目，正好使用一下，以弥补之前没用上的遗憾，顺带说一下感受 使用 m-&amp;gt;model，基本上是实体类 v-&amp;gt;view，对界面的操作封装，一般是Activity或者Fragment来实现 p-&amp;gt;presenter，业务逻辑的封装层，一般持有view的实例，以便刷新界面  经验之谈 对v来说，有需要的话可">
   
     <link rel="alternate" href="/atom.xml" title="Halfcup的个人收藏" type="application/atom+xml">
   
@@ -59,58 +64,60 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2017/04/18/nesting/" class="archive-article-date">
-  <time datetime="2017-04-18T13:35:08.000Z" itemprop="datePublished">Apr 18</time>
+        <section id="main"><article id="post-mvp实战感受" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/08/26/mvp实战感受/" class="article-date">
+  <time datetime="2018-08-26T14:10:57.783Z" itemprop="datePublished">2018-08-26</time>
 </a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/04/18/nesting/">nesting.md</a>
-    </h1>
-  
-
-    </header>
+    
   </div>
-</article>
-  
+  <div class="article-inner">
     
     
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2017/04/10/hello-world/" class="archive-article-date">
-  <time datetime="2017-04-10T12:59:15.595Z" itemprop="datePublished">Apr 10</time>
-</a>
+    <div class="article-entry" itemprop="articleBody">
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/04/10/hello-world/">Hello World</a>
-    </h1>
-  
+        <h1 id="MVP使用感受"><a href="#MVP使用感受" class="headerlink" title="MVP使用感受"></a>MVP使用感受</h1><p>花了一个月时间去外包感受了一下外包的氛围，意外居然碰到了使用MVP的项目，正好使用一下，以弥补之前没用上的遗憾，顺带说一下感受</p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><ul>
+<li>m-&gt;model，基本上是实体类</li>
+<li>v-&gt;view，对界面的操作封装，一般是Activity或者Fragment来实现</li>
+<li>p-&gt;presenter，业务逻辑的封装层，一般持有view的实例，以便刷新界面</li>
+</ul>
+<h2 id="经验之谈"><a href="#经验之谈" class="headerlink" title="经验之谈"></a>经验之谈</h2><ol>
+<li>对v来说，有需要的话可以提取reg&amp;unreg方法，把一些需要和生命周期关联的方法放在这边，不过没有需要的话也可以不提；</li>
+<li>对p来说，如果业务很复杂，重用了某个p，或者是某个p里面的同一方法需要调用不同的方法，最好再定义一个类似remote source这样的工具，根据参数提供不同的请求。</li>
+</ol>
 
-    </header>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/08/26/mvp实战感受/" data-id="cjvwfwgmm000484w2aifxponp" class="article-share-link">Share</a>
+      
+      
+    </footer>
   </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/05/07/面试聚美优品失败总结/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          面试聚美优品失败总结
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/05/10/Retrofit流程分析/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title"></div>
+    </a>
+  
+</nav>
+
+  
 </article>
-  
-  
-    </div></section>
-  
 
 </section>
         

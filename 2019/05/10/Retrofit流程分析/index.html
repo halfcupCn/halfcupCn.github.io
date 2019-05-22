@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Halfcup的个人收藏</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="从使用流程开始分析构建Retrofit实例我们先采用最简单的构建方式：1val retrofit = Retrofit.Builder().build() 一步一步地深入源码去看，第一步是创建了Retrofit.Builder123public Builder() &amp;#123;  this(Platform.get());&amp;#125; 在这里调用了Platform.get()，这个方法是获取一个P">
+<meta name="keywords">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Halfcup的个人收藏">
+<meta property="og:url" content="http://yoursite.com/2019/05/10/Retrofit流程分析/index.html">
+<meta property="og:site_name" content="Halfcup的个人收藏">
+<meta property="og:description" content="从使用流程开始分析构建Retrofit实例我们先采用最简单的构建方式：1val retrofit = Retrofit.Builder().build() 一步一步地深入源码去看，第一步是创建了Retrofit.Builder123public Builder() &amp;#123;  this(Platform.get());&amp;#125; 在这里调用了Platform.get()，这个方法是获取一个P">
+<meta property="og:updated_time" content="2019-05-20T13:56:38.986Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Halfcup的个人收藏">
+<meta name="twitter:description" content="从使用流程开始分析构建Retrofit实例我们先采用最简单的构建方式：1val retrofit = Retrofit.Builder().build() 一步一步地深入源码去看，第一步是创建了Retrofit.Builder123public Builder() &amp;#123;  this(Platform.get());&amp;#125; 在这里调用了Platform.get()，这个方法是获取一个P">
+  
+    <link rel="alternate" href="/atom.xml" title="Halfcup的个人收藏" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Halfcup的个人收藏</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Retrofit流程分析" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/05/10/Retrofit流程分析/" class="article-date">
+  <time datetime="2019-05-10T02:23:24.399Z" itemprop="datePublished">2019-05-10</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="从使用流程开始分析"><a href="#从使用流程开始分析" class="headerlink" title="从使用流程开始分析"></a>从使用流程开始分析</h2><h3 id="构建Retrofit实例"><a href="#构建Retrofit实例" class="headerlink" title="构建Retrofit实例"></a>构建<code>Retrofit</code>实例</h3><p>我们先采用最简单的构建方式：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">val</span> retrofit = Retrofit.Builder().build()</div></pre></td></tr></table></figure></p>
+<p>一步一步地深入源码去看，第一步是创建了<code>Retrofit.Builder</code><br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> Builder() &#123;</div><div class="line">  <span class="keyword">this</span>(Platform.<span class="keyword">get</span>());</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>在这里调用了<code>Platform.get()</code>，这个方法是获取一个<code>Platform</code>实例，也就是为了指定Retrofit当前的平台，对我现在的情境来说，会返回一个<code>Android</code>实例。而判断当前平台的方法是通过反射去获取<code>android.os.Build</code>类，如果有这个类，那么就会通过无参构造方法返回一个<code>Android</code>实例<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Platform PLATFORM = findPlatform();</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">static</span> Platform <span class="title">get</span><span class="params">()</span> </span>&#123;</div><div class="line">  <span class="keyword">return</span> PLATFORM;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> Platform <span class="title">findPlatform</span><span class="params">()</span> </span>&#123;</div><div class="line">  <span class="keyword">try</span> &#123;</div><div class="line">    Class.forName(<span class="string">"android.os.Build"</span>);</div><div class="line">    <span class="keyword">if</span> (Build.VERSION.SDK_INT != <span class="number">0</span>) &#123;</div><div class="line">      <span class="keyword">return</span> <span class="keyword">new</span> Android();</div><div class="line">    &#125;</div><div class="line">  &#125; <span class="keyword">catch</span> (ClassNotFoundException ignored) &#123;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">try</span> &#123;</div><div class="line">    Class.forName(<span class="string">"java.util.Optional"</span>);</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Java8();</div><div class="line">  &#125; <span class="keyword">catch</span> (ClassNotFoundException ignored) &#123;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> <span class="keyword">new</span> Platform();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>但是具体这个实例有什么作用呢，暂时还看不出来，先继续顺着流程往后面看。<br>刚才我们已经获得了<code>Retrofit.Builder</code>的实例，通过它的<code>build()</code>方法，我们可以得到<code>Retrofit</code>实例，那这个方法里面做了什么呢？<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> Retrofit <span class="title">build</span><span class="params">()</span> </span>&#123;</div><div class="line">  <span class="keyword">if</span> (baseUrl == <span class="keyword">null</span>) &#123;</div><div class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Base URL required."</span>);</div><div class="line">  &#125;</div><div class="line">  okhttp3.Call.Factory callFactory = <span class="keyword">this</span>.callFactory;</div><div class="line">  <span class="keyword">if</span> (callFactory == <span class="keyword">null</span>) &#123;</div><div class="line">    callFactory = <span class="keyword">new</span> OkHttpClient();</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  Executor callbackExecutor = <span class="keyword">this</span>.callbackExecutor;</div><div class="line">  <span class="keyword">if</span> (callbackExecutor == <span class="keyword">null</span>) &#123;</div><div class="line">    callbackExecutor = platform.defaultCallbackExecutor();</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="comment">// Make a defensive copy of the adapters and add the default Call adapter.</span></div><div class="line">  List&lt;CallAdapter.Factory&gt; callAdapterFactories = <span class="keyword">new</span> ArrayList&lt;&gt;(<span class="keyword">this</span>.callAdapterFactories);</div><div class="line">  callAdapterFactories.addAll(platform.defaultCallAdapterFactories(callbackExecutor));</div><div class="line"></div><div class="line">  <span class="comment">// Make a defensive copy of the converters.</span></div><div class="line">  List&lt;Converter.Factory&gt; converterFactories = <span class="keyword">new</span> ArrayList&lt;&gt;(</div><div class="line">      <span class="number">1</span> + <span class="keyword">this</span>.converterFactories.size() + platform.defaultConverterFactoriesSize());</div><div class="line"></div><div class="line">  <span class="comment">// Add the built-in converter factory first. This prevents overriding its behavior but also</span></div><div class="line">  <span class="comment">// ensures correct behavior when using converters that consume all types.</span></div><div class="line">  converterFactories.add(<span class="keyword">new</span> BuiltInConverters());</div><div class="line">  converterFactories.addAll(<span class="keyword">this</span>.converterFactories);</div><div class="line">  converterFactories.addAll(platform.defaultConverterFactories());</div><div class="line"></div><div class="line">  <span class="keyword">return</span> <span class="keyword">new</span> Retrofit(callFactory, baseUrl, unmodifiableList(converterFactories),</div><div class="line">      unmodifiableList(callAdapterFactories), callbackExecutor, validateEagerly);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>可以看到做了几件事情：</p>
+<ol>
+<li>检查<code>baseUrl</code>，如果没有设置就会抛出<code>IllegalStateException</code>异常</li>
+<li>使用Builder的callFactory为Retrofit构造，如果没有设置，则会构造一个<code>okhttp3.OkHttpClient</code>实例作为callFactory</li>
+<li>使用Builder的callbackExecutor为Retrofit构造，如果没有设置，则会调用<code>platform.defaultCallbackExecutor()</code>生成callbackExecutor</li>
+<li>使用Builder的callAdapterFactories作为Retrofit构造，但先调用<code>platform.defaultCallAdapterFactories(callbackExecutor)</code>添加一些callAdapter</li>
+<li>创建一个converterFactories的List<ul>
+<li>添加<code>BuiltInConverters</code></li>
+<li>添加Builder的converterFactories</li>
+<li>添加<code>platform.defaultConverterFactories()</code></li>
+</ul>
+</li>
+<li>调用Retrofit的有参构造创建实例并返回</li>
+</ol>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">retrofit.create(GithubApi::<span class="class"><span class="keyword">class</span>.<span class="title">java</span>).<span class="title">listRepos</span></span>(<span class="string">""</span>)</div></pre></td></tr></table></figure>
+<p>分为<code>create(service)</code>和<code>listRepos</code>两个过程</p>
+<ol>
+<li>create<ol>
+<li>检查service是不是接口，并且没有继承其它 的接口</li>
+<li>通过Java的<code>Proxy.newInstance()</code>方法，使用反射生成对应的service实例<ol>
+<li>实际的实现方法是在<code>InvocationHandler.invoke</code>中，在这之中又调用了<code>loadServiceMethod</code>，而最后又是传递给了<code>ServiceMethod.parseAnnotations</code>去做</li>
+<li>在<code>ServiceMethod.parseAnnotations</code>中，构造了<code>RequestFactory</code>来执行拼装，但是调用又传递给了<code>HttpServiceMethod.parseAnnotations</code></li>
+<li>最后创建了一个<code>HttpServiceMethod</code>的实例，它来通过callAdapter来最后实现，callAdapter中使用了代理类来实现，默认的实现是<code>OkHttpCall</code></li>
+</ol>
+</li>
+</ol>
+</li>
+<li>listRepos，也就是实际的方法调用</li>
+</ol>
+<h3 id="关键点"><a href="#关键点" class="headerlink" title="关键点"></a>关键点</h3><p>可以看到，上面有几个关键点</p>
+<ol>
+<li>CallAdapter</li>
+<li>Converter</li>
+<li>CallExcuter<br>CallAdapter来创建Call，Converter来转换返回结果，CallExcuter来执行Call的逻辑</li>
+</ol>
+<h3 id="TODO：后续找时间补上调用方法的流程图"><a href="#TODO：后续找时间补上调用方法的流程图" class="headerlink" title="TODO：后续找时间补上调用方法的流程图"></a>TODO：后续找时间补上调用方法的流程图</h3>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/05/10/Retrofit流程分析/" data-id="cjvwfwgm9000084w2e10nqgct" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/08/26/mvp实战感受/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/05/10/Retrofit流程分析/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/08/26/mvp实战感受/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/05/07/面试聚美优品失败总结/">面试聚美优品失败总结</a>
+          </li>
+        
+          <li>
+            <a href="/2017/09/05/RxJava操作符使用1/">RxJava操作符使用1</a>
+          </li>
+        
+          <li>
+            <a href="/2017/07/20/leetcode_226/">leetcode no.226</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 halfcup<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

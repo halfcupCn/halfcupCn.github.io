@@ -6,13 +6,13 @@
   <title>RxJava操作符使用1 | Halfcup的个人收藏</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="RxJava用了很久了，但是一直都是最简单的flatMap或者just、from、foreach这种简单的操作符就完毕了，很难用到其他的操作符，等到用到的时候再去查又有一点太晚了，所以这次干脆就一次性全部都看看到底都是些什么操作符和作用。  这些操作符都只针对当前我使用的版本：RxAndroid 1.1.2-RxJava 1.1.6来介绍，源文档来自Rx官方文档 创建Observables顾名思">
+<meta name="keywords">
 <meta property="og:type" content="article">
 <meta property="og:title" content="RxJava操作符使用1">
 <meta property="og:url" content="http://yoursite.com/2017/09/05/RxJava操作符使用1/index.html">
 <meta property="og:site_name" content="Halfcup的个人收藏">
 <meta property="og:description" content="RxJava用了很久了，但是一直都是最简单的flatMap或者just、from、foreach这种简单的操作符就完毕了，很难用到其他的操作符，等到用到的时候再去查又有一点太晚了，所以这次干脆就一次性全部都看看到底都是些什么操作符和作用。  这些操作符都只针对当前我使用的版本：RxAndroid 1.1.2-RxJava 1.1.6来介绍，源文档来自Rx官方文档 创建Observables顾名思">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-04-19T00:51:15.331Z">
+<meta property="og:updated_time" content="2017-09-05T15:21:40.482Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RxJava操作符使用1">
 <meta name="twitter:description" content="RxJava用了很久了，但是一直都是最简单的flatMap或者just、from、foreach这种简单的操作符就完毕了，很难用到其他的操作符，等到用到的时候再去查又有一点太晚了，所以这次干脆就一次性全部都看看到底都是些什么操作符和作用。  这些操作符都只针对当前我使用的版本：RxAndroid 1.1.2-RxJava 1.1.6来介绍，源文档来自Rx官方文档 创建Observables顾名思">
@@ -89,23 +89,23 @@
         <blockquote>
 <p>RxJava用了很久了，但是一直都是最简单的<code>flatMap</code>或者<code>just</code>、<code>from</code>、<code>foreach</code>这种简单的操作符就完毕了，很难用到其他的操作符，等到用到的时候再去查又有一点太晚了，所以这次干脆就一次性全部都看看到底都是些什么操作符和作用。</p>
 </blockquote>
-<p><em>这些操作符都只针对当前我使用的版本：RxAndroid 1.1.2-RxJava 1.1.6来介绍，源文档来自<a href="http://reactivex.io/documentation/operators.html#categorized" target="_blank" rel="noopener">Rx官方文档</a></em></p>
+<p><em>这些操作符都只针对当前我使用的版本：RxAndroid 1.1.2-RxJava 1.1.6来介绍，源文档来自<a href="http://reactivex.io/documentation/operators.html#categorized" target="_blank" rel="external">Rx官方文档</a></em></p>
 <h1 id="创建Observables"><a href="#创建Observables" class="headerlink" title="创建Observables"></a>创建Observables</h1><p>顾名思义，所有下列操作符都会创建Observable<strong>s</strong></p>
 <h2 id="Create"><a href="#Create" class="headerlink" title="Create"></a>Create</h2><blockquote>
 <p>create an Observable from scratch by calling observer methods programmatically<br>意思是调用observer的方法从头创建<strong>一个</strong>Observable</p>
 </blockquote>
 <p>示例代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">Observable.create(new Observable.OnSubscribe&lt;Integer&gt;() &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void call(Subscriber&lt;? super Integer&gt; observer) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            if (!observer.isUnsubscribed()) &#123;</span><br><span class="line">                for (int i = 1; i &lt; 5; i++) &#123;</span><br><span class="line">                    observer.onNext(i);</span><br><span class="line">                &#125;</span><br><span class="line">                observer.onCompleted();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            observer.onError(e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"> &#125; ).subscribe(new Subscriber&lt;Integer&gt;() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void onNext(Integer item) &#123;</span><br><span class="line">            System.out.println(&quot;Next: &quot; + item);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void onError(Throwable error) &#123;</span><br><span class="line">            System.err.println(&quot;Error: &quot; + error.getMessage());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void onCompleted() &#123;</span><br><span class="line">            System.out.println(&quot;Sequence complete.&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">Observable.create(new Observable.OnSubscribe&lt;Integer&gt;() &#123;</div><div class="line">    @Override</div><div class="line">    public void call(Subscriber&lt;? super Integer&gt; observer) &#123;</div><div class="line">        try &#123;</div><div class="line">            if (!observer.isUnsubscribed()) &#123;</div><div class="line">                for (int i = 1; i &lt; 5; i++) &#123;</div><div class="line">                    observer.onNext(i);</div><div class="line">                &#125;</div><div class="line">                observer.onCompleted();</div><div class="line">            &#125;</div><div class="line">        &#125; catch (Exception e) &#123;</div><div class="line">            observer.onError(e);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"> &#125; ).subscribe(new Subscriber&lt;Integer&gt;() &#123;</div><div class="line">        @Override</div><div class="line">        public void onNext(Integer item) &#123;</div><div class="line">            System.out.println(&quot;Next: &quot; + item);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public void onError(Throwable error) &#123;</div><div class="line">            System.err.println(&quot;Error: &quot; + error.getMessage());</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public void onCompleted() &#123;</div><div class="line">            System.out.println(&quot;Sequence complete.&quot;);</div><div class="line">        &#125;</div><div class="line">    &#125;);</div></pre></td></tr></table></figure>
 <p>用Create操作符可以从头创建一个Observable，传递给这个Observable一个接收observer作为它的参数的方法，在这个方法体内按合适的顺序调用<code>onNext</code>，<code>onError</code>，<code>onCompleted</code>来让这个方法成为一个正确的的Observable-其中<code>onCompleted</code>和<code>onErrir</code>至少执行一个，并且它们之后不要再调用这个Observable的其它方法。</p>
 <h2 id="Defer"><a href="#Defer" class="headerlink" title="Defer"></a>Defer</h2><blockquote>
 <p>当observer订阅时，给每个observer创建一个新的Observable</p>
 </blockquote>
 <p>示例代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/09/05/RxJava操作符使用1/" data-id="cjg6ac06n00077gut72fpo62m" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/09/05/RxJava操作符使用1/" data-id="cjvwfwgmj000284w2l9o1rsp5" class="article-share-link">Share</a>
       
       
     </footer>
@@ -114,19 +114,19 @@
     
 <nav id="article-nav">
   
-    <a href="/2018/04/19/notice/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2017/07/20/leetcode_226/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          (no title)
+          leetcode no.226
         
       </div>
     </a>
   
   
-    <a href="/2017/07/20/leetcode-226/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2018/05/07/面试聚美优品失败总结/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">leetcode no.226</div>
+      <div class="article-nav-title">面试聚美优品失败总结</div>
     </a>
   
 </nav>
@@ -139,39 +139,18 @@
           <aside id="sidebar">
   
     
-  <div class="widget-wrap">
-    <h3 class="widget-title">Categories</h3>
-    <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/algorithm/">algorithm</a></li></ul>
-    </div>
-  </div>
-
 
   
     
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
-    <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
-    </div>
-  </div>
-
 
   
     
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/leetcode/" style="font-size: 10px;">leetcode</a>
-    </div>
-  </div>
-
   
     
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li></ul>
     </div>
   </div>
 
@@ -184,23 +163,23 @@
       <ul>
         
           <li>
-            <a href="/2018/04/19/leetcode-598/">leetcode no.598</a>
+            <a href="/2019/05/10/Retrofit流程分析/">(no title)</a>
           </li>
         
           <li>
-            <a href="/2018/04/19/leetcode-492/">leetcode no.492</a>
+            <a href="/2018/08/26/mvp实战感受/">(no title)</a>
           </li>
         
           <li>
-            <a href="/2018/04/19/realm&databinding/">Realm Bugs</a>
+            <a href="/2018/05/07/面试聚美优品失败总结/">面试聚美优品失败总结</a>
           </li>
         
           <li>
-            <a href="/2018/04/19/hello-world/">Hello World</a>
+            <a href="/2017/09/05/RxJava操作符使用1/">RxJava操作符使用1</a>
           </li>
         
           <li>
-            <a href="/2018/04/19/leetcode-42/">leetcode no.42</a>
+            <a href="/2017/07/20/leetcode_226/">leetcode no.226</a>
           </li>
         
       </ul>
@@ -215,7 +194,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2018 halfcup<br>
+      &copy; 2019 halfcup<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
