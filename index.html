@@ -61,6 +61,87 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Gradle Build流程说明" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/05/23/Gradle Build流程说明/" class="article-date">
+  <time datetime="2019-05-23T02:13:12.658Z" itemprop="datePublished">2019-05-23</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>源说明来自Gradle官网对build流程的<a href="https://docs.gradle.org/current/userguide/build_lifecycle.html#build_lifecycle" target="_blank" rel="external">介绍</a></p>
+</blockquote>
+<h2 id="build阶段"><a href="#build阶段" class="headerlink" title="build阶段"></a>build阶段</h2><ol>
+<li><p>Initialization/初始化<br>Gradle支持单项目和多项目build，在初始化阶段，Gradle确定要参与build过程中的哪些部分，同时为每个项目生成一个<code>Project</code>实例；</p>
+</li>
+<li><p>Configuration/配置<br>这个阶段<code>project</code>实例会添加配置，项目中的构建脚本将被执行；</p>
+</li>
+<li><p>Execution/执行<br>Gradle在这个阶段生成并配置任务的子集，然后执行。子集通过传递给gradle命令的任务名来确定，确定后会逐一执行任务。</p>
+</li>
+</ol>
+<h2 id="设置文件"><a href="#设置文件" class="headerlink" title="设置文件"></a>设置文件</h2><p>除了那些构建脚本，Gradle还定义了一些设置文件。这些设置文件取决于Gradle的命名惯例。默认的设置文件名称是<code>settings.gradle</code>。</p>
+<p>设置文件在初始化阶段被执行。一个多项目的构建，必须要在根项目的多项目层次结构中有一个<code>settings.gradle</code>文件，它用来定义某个项目参与多项目构建中的哪个阶段。对单项目构建来说，它是可选项。除了定义被囊括的项目以外，你还可以用它来向你的构建脚本的<code>classpath</code>添加库。</p>
+<p>对构建脚本来说，所有的属性获取和方法调用都通过<code>project</code>实例代理实现，与此相似的是设置文件中所有的属性获取的方法调用都通过<a href="https://docs.gradle.org/current/dsl/org.gradle.api.initialization.Settings.html" target="_blank" rel="external"><code>Setting</code></a>实例代理。</p>
+<h2 id="多项目构建"><a href="#多项目构建" class="headerlink" title="多项目构建"></a>多项目构建</h2><p>你需要在设置文件中声明参与多项目构建的项目，具体详见：<a href="https://docs.gradle.org/current/userguide/multi_project_builds.html#multi_project_builds" target="_blank" rel="external">multi_project_build</a></p>
+<h3 id="项目位置"><a href="#项目位置" class="headerlink" title="项目位置"></a>项目位置</h3><p>多项目构建由一棵只有一个根节点的树来代表。树上面的每一个节点都代表一个项目。一个项目有一个代表它在多项目构建树中位置的路径。大多数情况下，项目路径和项目在物理文件系统中的路径一致。但是这个路径是可以配置的。项目树在<code>settings.gradle</code>中被创建。默认情况下设置文件的路径也就是root项目的路径。</p>
+<h3 id="构建树"><a href="#构建树" class="headerlink" title="构建树"></a>构建树</h3><p>在设置文件中，你可以使用很多方法去构建项目树。分层和平铺的物理布局得到特别支持。</p>
+<h4 id="分层布局"><a href="#分层布局" class="headerlink" title="分层布局"></a>分层布局</h4><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">settings.gradle</div><div class="line">include <span class="string">'project1'</span>, <span class="string">'project2:child'</span>, <span class="string">'project3:child1'</span></div></pre></td></tr></table></figure>
+<p><code>include</code>方法把项目地址当作参数。项目路径被当作和相对物理文件系统路径一致。比如说”services:api”被映射为相对于root项目的”services/api”。你只需要指定树的叶子。这意味着对包含”services:hotels:api”会导致生成三个<code>project</code>：<code>services</code>、<code>services:hotels</code>和<code>services:hotels:api</code>。</p>
+<h4 id="平铺布局"><a href="#平铺布局" class="headerlink" title="平铺布局"></a>平铺布局</h4><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">settings.gradle</div><div class="line">includeFlat <span class="string">'project3'</span>, <span class="string">'project4'</span></div></pre></td></tr></table></figure>
+<p><code>includeFlat</code>方法把目录名字当作参数。这些目录要作为root项目的子目录。在多项目构建时这些目录应该是root项目的子项目。</p>
+<h4 id="修改项目树的元素"><a href="#修改项目树的元素" class="headerlink" title="修改项目树的元素"></a>修改项目树的元素</h4><p>在设置文件中，由所谓的<a href="https://docs.gradle.org/current/javadoc/org/gradle/api/initialization/ProjectDescriptor.html" target="_blank" rel="external">项目描述符(project descriptors)</a>来生成多项目构建树。任何时间你都可以在设置文件中修改描述符。可以采用如下方式来修改：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">settings.gradle</div><div class="line">println rootProject.name</div><div class="line">println project(<span class="string">':projectA'</span>).name</div></pre></td></tr></table></figure></p>
+<p>通过描述符你可以改变项目的名字、项目目录和构建文件。</p>
+<p>通过如下代码可以改变项目树的元素：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">rootProject.name = <span class="string">'main'</span></div><div class="line">project(<span class="string">':projectA'</span>).projectDir = <span class="keyword">new</span> File(settingsDir, <span class="string">'../my-project-a'</span>)</div><div class="line">project(<span class="string">':projectA'</span>).buildFileName = <span class="string">'projectA.gradle'</span></div></pre></td></tr></table></figure></p>
+<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><p>Gradle怎么确定当前是单项目构建还是多项目构建呢？具体是通过<code>settings.gradle</code>文件来确定的。<br>Gradle通过如下方式寻找<code>settings.gradle</code>文件：</p>
+<ul>
+<li>会寻找和当前目录同一逻辑层级的<code>master</code>目录</li>
+<li>没找到会去父目录寻找</li>
+<li>没找到的话会当作单项目构建</li>
+<li>如果找到了<code>settings.gradle</code>文件，Gradle会检查当前项目是不是定义在<code>settings.gradle</code>文件中的多项目构建中，如果不是的话，会当作单项目构建，否则会启动多项目构建。</li>
+</ul>
+<p>这个行为的目的是什么呢？Gradle需要确定当前执行构建命令所在的项目是在不是在一个多项目构建的子项目中。当然，如果是一个子项目，只有它和它依赖的项目会被构建，但是Gradle需要为整个多项目构建生成配置。如果当前项目包含一个<code>settings.gradle</code>文件，那么会按照如下方式执行：</p>
+<ul>
+<li>如果<code>settings.gradle</code>文件中没有指定多项目层次结构，执行单项目构建</li>
+<li>否则执行多项目构建 </li>
+</ul>
+<p>只有带物理多层次结构或者平铺布局的多项目构建会自动搜索<code>settings.gradle</code>文件。对平铺布局来说，必须额外遵循<code>master</code>上的命名规范。Gradle支持自定义的物理布局，但当你需要在设置文件所在目录执行构建。可见<a href="https://docs.gradle.org/current/userguide/multi_project_builds.html#sec:running_partial_build_from_the_root" target="_blank" rel="external">在绝对路径上执行任务</a>。</p>
+<p>多项目构建时，Gradle会为<code>Setting</code>对象中包括root项目在内的所有项目都生成一个<code>project</code>对象，对象的默认名字是对应项目的根目录的名字，而且除了root项目以外的其它项目都有父项目。每个项目都可能有子项目。</p>
+<h3 id="单项目构建的配置和执行"><a href="#单项目构建的配置和执行" class="headerlink" title="单项目构建的配置和执行"></a>单项目构建的配置和执行</h3><p>对单项目文件来说，初始化之后的工作流相当简洁。针对生成<code>project</code>对象的构建脚本在初始化阶段中执行。Gradle执行和命令行中参数名字一样的任务。如果找到对应的任务，它们会按照参数传递的顺序作为独立的构建来执行。可见<a href="https://docs.gradle.org/current/userguide/multi_project_builds.html#multi_project_builds" target="_blank" rel="external">多项目构建</a></p>
+<h3 id="响应构建脚本中的生命周期"><a href="#响应构建脚本中的生命周期" class="headerlink" title="响应构建脚本中的生命周期"></a>响应构建脚本中的生命周期</h3><p>构建脚本可以在构建过程中通过生命周期接收通知。这些通知可以通过两种形式实现：要么实现一个特定的<a href="https://docs.gradle.org/current/javadoc/org/gradle/api/ProjectEvaluationListener.html" target="_blank" rel="external">监听接口</a>，要么当通知发送时传递一个可执行的闭包。接下来将用闭包来举例。</p>
+<h4 id="项目评估"><a href="#项目评估" class="headerlink" title="项目评估"></a>项目评估</h4><p>项目被评估前和之后你都会立即收到一个通知。当一个构建脚本中的所有定义都应用了这可以用来执行额外的配置，或者是添加一些额外的日志记录和分析。</p>
+<p>下面是给有<code>hasTests</code>属性的项目添加一个<code>test</code>任务的实例：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">build.gradle</div><div class="line">allprojects &#123;</div><div class="line">    afterEvaluate &#123; project -&gt;</div><div class="line">        <span class="keyword">if</span> (project.hasTests) &#123;</div><div class="line">            println <span class="string">"Adding test task to $project"</span></div><div class="line">            project.task(<span class="string">'test'</span>) &#123;</div><div class="line">                doLast &#123;</div><div class="line">                    println <span class="string">"Running tests for $project"</span></div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">projectA.gradle</div><div class="line">hasTests = <span class="literal">true</span></div></pre></td></tr></table></figure>
+<p>Output of<code>gradle -q test</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt; gradle -q test</div><div class="line">Adding test task to project &apos;:projectA&apos;</div><div class="line">Running tests for project &apos;:projectA&apos;</div></pre></td></tr></table></figure></p>
+<p>示例使用<code>Project.afterEvaluate()</code>为项目添加一个在被评估后执行的闭包。</p>
+<p>任何项目被评估的时候都可以收到通知。下面的示例为项目评估增加了一些自定义的日志。请注意<code>afterProject</code>这个通知不管项目评估成功或者异常失败都会发出。</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">build.gradle</div><div class="line">gradle.afterProject &#123; project -&gt;</div><div class="line">    <span class="keyword">if</span> (project.state.failure) &#123;</div><div class="line">        println <span class="string">"Evaluation of $project FAILED"</span></div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        println <span class="string">"Evaluation of $project succeeded"</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="任务生成"><a href="#任务生成" class="headerlink" title="任务生成"></a>任务生成</h4><p>当任务添加到项目之后你会马上收到一个通知。这可以用来给构建文件中任务在可用之前设置一些默认值或者添加一些行为。</p>
+<p>下面的示例展示了当项目创建时给项目设置<code>srcDir</code>属性：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">build.gradle</div><div class="line">tasks.whenTaskAdded &#123; task -&gt;</div><div class="line">    task.ext.srcDir = <span class="string">'src/main/java'</span></div><div class="line">&#125;</div><div class="line"></div><div class="line">task a</div><div class="line"></div><div class="line">println <span class="string">"source dir is $a.srcDir"</span></div></pre></td></tr></table></figure></p>
+<p><code>gradle -q a</code>的执行结果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&gt; gradle -q a</div><div class="line">source dir is src/main/java</div></pre></td></tr></table></figure></p>
+<h4 id="任务执行图形化"><a href="#任务执行图形化" class="headerlink" title="任务执行图形化"></a>任务执行图形化</h4><p>当任务执行情况<a href="https://docs.gradle.org/current/userguide/tutorial_using_tasks.html#configure-by-dag" target="_blank" rel="external">图表</a>填充完毕之后，你会立即收到一个通知，你也可以给<a href="https://docs.gradle.org/current/javadoc/org/gradle/api/execution/TaskExecutionGraph.html" target="_blank" rel="external"><code>TaskExecutionGraph</code></a>添加<a href="https://docs.gradle.org/current/javadoc/org/gradle/api/execution/TaskExecutionGraph.html" target="_blank" rel="external"><code>TaskExecutionGraphListener</code></a>来接收这个通知。</p>
+<h4 id="任务执行"><a href="#任务执行" class="headerlink" title="任务执行"></a>任务执行</h4><p>当任务执行前和执行完成后你都会收到通知。</p>
+<p>下面的示例展示了在任务执行的前后做记录，值得注意的是，<code>afterTask</code>通知不管任务成功执行或是异常失败都会发出。</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">build.gradle</div><div class="line">task ok</div><div class="line"></div><div class="line">task broken(<span class="string">dependsOn:</span> ok) &#123;</div><div class="line">    doLast &#123;</div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">'broken'</span>)</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">gradle.taskGraph.beforeTask &#123; Task task -&gt;</div><div class="line">    println <span class="string">"executing $task ..."</span></div><div class="line">&#125;</div><div class="line"></div><div class="line">gradle.taskGraph.afterTask &#123; Task task, TaskState state -&gt;</div><div class="line">    <span class="keyword">if</span> (state.failure) &#123;</div><div class="line">        println <span class="string">"FAILED"</span></div><div class="line">    &#125;</div><div class="line">    <span class="keyword">else</span> &#123;</div><div class="line">        println <span class="string">"done"</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>gradle -q broken</code>输出结果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">&gt; gradle -q broken</div><div class="line">executing task &apos;:ok&apos; ...</div><div class="line">done</div><div class="line">executing task &apos;:broken&apos; ...</div><div class="line">FAILED</div><div class="line"></div><div class="line">FAILURE: Build failed with an exception.</div><div class="line"></div><div class="line">* Where:</div><div class="line">Build file &apos;/home/user/gradle/samples/groovy/build.gradle&apos; line: 5</div><div class="line"></div><div class="line">* What went wrong:</div><div class="line">Execution failed for task &apos;:broken&apos;.</div><div class="line">&gt; broken</div><div class="line"></div><div class="line">* Try:</div><div class="line">Run with --stacktrace option to get the stack trace. Run with --info or --debug option to get more log output. Run with --scan to get full insights.</div><div class="line"></div><div class="line">* Get more help at https://help.gradle.org</div><div class="line"></div><div class="line">BUILD FAILED in 0s</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/05/23/Gradle Build流程说明/" data-id="cjw8tp6rd00003sw2azczfinq" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Retrofit流程分析" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/05/10/Retrofit流程分析/" class="article-date">
@@ -507,6 +588,10 @@
       <ul>
         
           <li>
+            <a href="/2019/05/23/Gradle Build流程说明/">(no title)</a>
+          </li>
+        
+          <li>
             <a href="/2019/05/10/Retrofit流程分析/">(no title)</a>
           </li>
         
@@ -520,10 +605,6 @@
         
           <li>
             <a href="/2017/09/05/RxJava操作符使用1/">RxJava操作符使用1</a>
-          </li>
-        
-          <li>
-            <a href="/2017/07/20/leetcode_226/">leetcode no.226</a>
           </li>
         
       </ul>
