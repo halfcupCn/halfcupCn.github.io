@@ -61,6 +61,233 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Android各版本唤起app安装解决方案" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/05/09/Android各版本唤起app安装解决方案/" class="article-date">
+  <time datetime="2020-05-09T05:47:05.413Z" itemprop="datePublished">2020-05-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>现在各种APP基本上都会附带自己的检测更新和升级逻辑，前面的检测和下载逻辑都大同小异，也不是本文的讨论重点，而网上后面安装逻辑大部分的实现应该是这样的：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">val</span> apkIntent = Intent(Intent.ACTION_VIEW).apply &#123;</div><div class="line">    setDataAndType(Uri.fromFile(File(apkLocation)), <span class="string">"application/vnd.android.package-archive"</span>)</div><div class="line">    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)</div><div class="line">&#125;</div><div class="line">startActivity(apkIntent)</div></pre></td></tr></table></figure></p>
+<p>也就是直接通过隐式意图（Intent）唤起响应<code>application/vnd.android.package-archive</code>这个type的Activity，也就是应用管理器。但是实际上这里会有一些坑，我这里一条一条的列举出来。</p>
+<h2 id="7-0以下"><a href="#7-0以下" class="headerlink" title="7.0以下"></a>7.0以下</h2><p>直接使用上面代码即可</p>
+<h2 id="7-0-8-0"><a href="#7-0-8-0" class="headerlink" title="7.0-8.0"></a>7.0-8.0</h2><p>如果直接使用上面的代码，会产生<code>android.os.FileUriExposedException: file:///storage/emulated/0/apk/xxx.apk exposed beyond app through Intent.getData()</code>这样一个异常，这是因为7.0之后系统对于应用间共享文件采用了<code>strick-mode</code>API，不允许通过Intent直接暴露<code>file://</code>的Uri，只能暴露<code>content://</code>的Uri，所以通过<code>FileProvider</code>来实现文件共享，所以我们现在把APK文件的下载路径添加到FileProvider的配置中，来让安装程序能够访问到这个文件。<br>按照<a href="https://developer.android.google.cn/reference/androidx/core/content/FileProvider?hl=zh-cn" target="_blank" rel="external">官网教程</a>来一步一步配置</p>
+<ol>
+<li><p>在AndroidManifest.xml中注册<code>provider</code></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">manifest</span>&gt;</span></div><div class="line">  ...</div><div class="line">  <span class="tag">&lt;<span class="name">application</span>&gt;</span></div><div class="line">    ...</div><div class="line">    <span class="tag">&lt;<span class="name">provider</span></span></div><div class="line">        <span class="attr">android:name</span>=<span class="string">"android.support.v4.content.FileProvider"</span></div><div class="line">        <span class="attr">android:authorities</span>=<span class="string">"com.halfcup.fileprovider"</span></div><div class="line">        <span class="attr">android:exported</span>=<span class="string">"false"</span></div><div class="line">        <span class="attr">android:grantUriPermissions</span>=<span class="string">"true"</span>&gt;</div><div class="line">        ...</div><div class="line">    <span class="tag">&lt;/<span class="name">provider</span>&gt;</span></div><div class="line">    ...</div><div class="line">  <span class="tag">&lt;/<span class="name">application</span>&gt;</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>在/res/xml下添加file_paths.xml文件</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">paths</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">external-path</span></span></div><div class="line">        <span class="attr">name</span>=<span class="string">"path_apk"</span></div><div class="line">        <span class="attr">path</span>=<span class="string">"apk"</span>/&gt;</div><div class="line"><span class="tag">&lt;/<span class="name">paths</span>&gt;</span></div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>最外层的tag用<code>paths</code>，表明是添加的路径，内层的tag可以用<code>external-media-path</code>、<code>external-cache-path</code>、<code>external-files-path</code>、<code>external-path</code>、<code>cache-path</code>、<code>files-path</code>，对应关系如下</p>
+<ul>
+<li><code>files-path</code>对应app内部存储中私有目录下的<code>/files</code>目录，即通过<code>Context.getFilesDir()</code>方法来获取的这个路径</li>
+<li><code>cache-path</code>对应app内部存储中私有目录下的<code>/cache</code>目录，即通过<code>Context.getCacheDir()</code>方法来获取的这个路径</li>
+<li><code>external-path</code>对应app外部存储的根目录，一般情况下是<code>/storage/0/</code>这个目录，也就是通过<code>Environment.getExternalStorageDirectory()</code>方法来获取的这个路径</li>
+<li><code>external-files-path</code>对应app外部存储中私有目录下的<code>/files</code>目录，也就是通过<code>Context#getExternalFilesDir(String)</code>方法来获取的路径</li>
+<li><code>external-cache-path</code>对应app外部存储中私有目录下的<code>/cache</code>目录，也就是通过<code>Context.getExternalCacheDir()</code>方法来获取的路径</li>
+<li><code>external-media-path</code>对应app外部存储中私有目录下的<code>/media</code>目录，也就是通过<code>Context.getExternalMediaDirs()</code>方法来获取的路径</li>
+</ul>
+<ol>
+<li><p>完成file_paths.xml文件的编写之后，通过<code>meta-data</code>将它添加到我们第一步中注册的provider中</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">provider</span></span></div><div class="line">    <span class="attr">android:name</span>=<span class="string">"androidx.core.content.FileProvider"</span></div><div class="line">    <span class="attr">android:authorities</span>=<span class="string">"com.halfcup.fileprovider"</span></div><div class="line">    <span class="attr">android:exported</span>=<span class="string">"false"</span></div><div class="line">    <span class="attr">android:grantUriPermissions</span>=<span class="string">"true"</span>&gt;</div><div class="line">    <span class="tag">&lt;<span class="name">meta-data</span></span></div><div class="line">        <span class="attr">android:name</span>=<span class="string">"android.support.FILE_PROVIDER_PATHS"</span></div><div class="line">        <span class="attr">android:resource</span>=<span class="string">"@xml/file_paths"</span> /&gt;</div><div class="line"><span class="tag">&lt;/<span class="name">provider</span>&gt;</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>构造一个<code>content://</code>Uri<br>我们的APK文件是放在外部存储根目录下的/apk文件夹下的，那么我们可以通过如下代码构建Uri：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">val</span> apkName = <span class="string">"xxx.apk"</span></div><div class="line"><span class="keyword">val</span> apkFile = File(File(Environment.getExternalStorageDirectory,<span class="string">"apk"</span>),apkName)</div><div class="line"><span class="keyword">val</span> uri = FileProvider.getUriForFile(<span class="keyword">this</span><span class="symbol">@MainActivity</span>,<span class="string">"com.halfcup.fileprovider"</span>,file)</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>这样我们就可以用这个uri替代我们之前的uri了</p>
+<ol>
+<li>添加访问权限<br>现在还是不能直接使用，需要添加访问权限才能够让其它应用访问，代码如下：<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)</div><div class="line"><span class="comment">//如果需要写入权限，添加这个</span></div><div class="line"><span class="comment">//intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)</span></div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>这样就完成了7.0的适配，现在我们把代码汇总一下：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">val</span> apkIntent = Intent(Intent.ACTION_VIEW).apply &#123;</div><div class="line">    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)</div><div class="line">    <span class="keyword">val</span> file = File(apkLocation)</div><div class="line">    setDataAndType(FileProvider.getUriForFile(<span class="keyword">this</span><span class="symbol">@MainActivity</span>,<span class="string">"com.halfcup.fileprovider"</span>,file), <span class="string">"application/vnd.android.package-archive"</span>)</div><div class="line">    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION) </div><div class="line"></div><div class="line">&#125;</div><div class="line">startActivity(apkIntent)</div></pre></td></tr></table></figure></p>
+<h2 id="8-0-10-0"><a href="#8-0-10-0" class="headerlink" title="8.0-10.0"></a>8.0-10.0</h2><p>添加<code>&lt;uses-permission android:name=&quot;android.permission.REQUEST_INSTALL_PACKAGES&quot;/&gt;</code>权限声明即可</p>
+<h2 id="10-0"><a href="#10-0" class="headerlink" title="10.0"></a>10.0</h2><p>10之后不再允许使用Intent来直接唤起安装管理器，而是必须通过<code>PackageInstaller</code>来安装，所以需要再做处理。</p>
+<ol>
+<li>创建一个<code>SessionParams</code>，指定mode，<code>SessionParams.MODE_FULL_INSTALL</code>用在全量安装的情境下，<code>SessionParams.MODE_INHERIT_EXISTING</code>用在增量或者拆分安装的情况下</li>
+<li>通过<code>SessionParams</code>创建<code>Session</code>，得到sessionId，通过sessionId写文件流，把apk文件直接写入</li>
+<li>发送PendingIntent</li>
+<li>提交Session</li>
+<li>处理安装返回<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">    <span class="keyword">val</span> inputStream = contentResolver.openInputStream(Uri.fromFile(file))</div><div class="line">    <span class="keyword">val</span> installer = packageManager.packageInstaller</div><div class="line">    <span class="keyword">val</span> params = SessionParams(SessionParams.MODE_FULL_INSTALL)</div><div class="line">    <span class="keyword">val</span> sessionId = installer.createSession(params)</div><div class="line">    <span class="keyword">val</span> session = installer.openSession(sessionId)</div><div class="line">    <span class="keyword">val</span> outputStream = session.openWrite(<span class="string">"fileLocation"</span>, <span class="number">0</span>, inputStream!!.available().toLong())</div><div class="line">    inputStream.copyTo(outputStream)</div><div class="line">    session.fsync(outputStream)</div><div class="line">    outputStream.close()</div><div class="line">    inputStream.close()</div><div class="line">    <span class="comment">//自己处理安装结果</span></div><div class="line">    component = ComponentName(<span class="keyword">this</span><span class="symbol">@MainActivity</span>, MainActivity::<span class="class"><span class="keyword">class</span>.<span class="title">java</span>)</span></div><div class="line">    action = <span class="string">"Action"</span></div><div class="line">    <span class="keyword">val</span> pi = PendingIntent.getActivity(<span class="keyword">this</span><span class="symbol">@MainActivity</span>, <span class="number">0x123</span>, <span class="keyword">this</span>, PendingIntent.FLAG_UPDATE_CURRENT)</div><div class="line">    session.commit(pi.intentSender)</div><div class="line">    session.close()</div><div class="line">&#125; <span class="keyword">catch</span> (e: IOException) &#123;</div><div class="line">    e.printStackTrace()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>这是发起安装的代码，需要再添加处理代码：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onNewIntent</span><span class="params">(intent: <span class="type">Intent</span>)</span></span> &#123;</div><div class="line">    <span class="keyword">val</span> extras = intent.extras</div><div class="line">    <span class="keyword">if</span> (extras != <span class="literal">null</span> &amp;&amp; <span class="string">"Action"</span> == intent.action) &#123;</div><div class="line">        <span class="keyword">val</span> status = extras.getInt(PackageInstaller.EXTRA_STATUS)</div><div class="line">        <span class="keyword">val</span> message = extras.getString(PackageInstaller.EXTRA_STATUS_MESSAGE)</div><div class="line">        <span class="keyword">when</span> (status) &#123;</div><div class="line">            PackageInstaller.STATUS_PENDING_USER_ACTION -&gt; &#123;</div><div class="line">                <span class="comment">// This test app isn't privileged, so the user has to confirm the install.</span></div><div class="line">                <span class="comment">// 需要继续唤起安装</span></div><div class="line">                <span class="keyword">val</span> confirmIntent = extras[Intent.EXTRA_INTENT] <span class="keyword">as</span> Intent?</div><div class="line">                startActivity(confirmIntent)</div><div class="line">            &#125;</div><div class="line">            PackageInstaller.STATUS_SUCCESS -&gt; Log.v(<span class="string">"TAG"</span>, <span class="string">"安装成功啦---&gt;"</span>)</div><div class="line">            PackageInstaller.STATUS_FAILURE, PackageInstaller.STATUS_FAILURE_ABORTED, PackageInstaller.STATUS_FAILURE_BLOCKED, PackageInstaller.STATUS_FAILURE_CONFLICT, PackageInstaller.STATUS_FAILURE_INCOMPATIBLE, PackageInstaller.STATUS_FAILURE_INVALID, PackageInstaller.STATUS_FAILURE_STORAGE -&gt; Log.v(<span class="string">"TAG"</span>, <span class="string">"安装失败啦---&gt;"</span>)</div><div class="line">            <span class="keyword">else</span> -&gt; Log.v(<span class="string">"TAG"</span>, <span class="string">"安装不知道为啥失败啦---&gt;"</span>)</div><div class="line">        &#125;</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/05/09/Android各版本唤起app安装解决方案/" data-id="cka3i9xar00006g5e2bbidu5y" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-shadowsocks配置v2ray插件记录" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/05/09/shadowsocks配置v2ray插件记录/" class="article-date">
+  <time datetime="2020-05-09T05:40:50.865Z" itemprop="datePublished">2020-05-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p><a href="https://funnyjs.com/shadowsocks_v2ray/" target="_blank" rel="external">https://funnyjs.com/shadowsocks_v2ray/</a><br>大体上都按照苏莉安大神的步骤来配置就可以了，但是我的vps上配置以后出现了<code>unable to parse config:permission denied</code>的错误，后来查询之后发现是因为shadowoscks-libev的systemd配置有问题，默认配置是有<code>user:nouser</code>的配置的，删除掉即可。如果不知道配置文件的位置，可以使用<code>sudo systemctl status shadowsocks-libev</code>来查看，第一行就是配置文件的位置。</p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/05/09/shadowsocks配置v2ray插件记录/" data-id="cka3i9xbi00016g5ehho9vpmy" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-版本变更重点" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/11/01/版本变更重点/" class="article-date">
+  <time datetime="2019-11-01T01:26:40.269Z" itemprop="datePublished">2019-11-01</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Android版本变更重点记录"><a href="#Android版本变更重点记录" class="headerlink" title="Android版本变更重点记录"></a>Android版本变更重点记录</h1><h2 id="7-0"><a href="#7-0" class="headerlink" title="7.0"></a>7.0</h2><h3 id="Doze"><a href="#Doze" class="headerlink" title="Doze"></a>Doze</h3><p>用户未接通电源，且屏幕关闭的一段时间的情况下，会进入Doze模式。</p>
+<p>进入Doze模式后，会推迟PowerManager.WakeLock、AlarmManager 闹铃、GPS 和 WLAN 扫描应用的执行。</p>
+<p>进入Doze模式之前，系统都会唤醒设备，提供一段窗口期，这时允许之前的任务的执行。</p>
+<p>当连接电源或者唤醒屏幕之后，会直接退出Doze模式。</p>
+<h3 id="应用私有文件限制"><a href="#应用私有文件限制" class="headerlink" title="应用私有文件限制"></a>应用私有文件限制</h3><ol>
+<li>私有文件使用全局读写将直接抛出<code>SecurityException</code>。</li>
+<li>加强应用私有文件权限限制，不允许直接使用开头为<code>file://</code>的URI来直接访问私有文件，而应该使用<code>FileProvider</code>，否则将抛出<code>FileUriExposedException</code>。</li>
+<li>使用<code>ContentResolver.openFileDescriptor()</code>来访问通过DownloadManager公开的文件。</li>
+</ol>
+<h3 id="NDK不允许访问平台私有API"><a href="#NDK不允许访问平台私有API" class="headerlink" title="NDK不允许访问平台私有API"></a>NDK不允许访问平台私有API</h3><p>替换为应用内携带的私有库副本或使用对应的公共NDK API。</p>
+<h3 id="名为-Crypto-的-JCA-提供程序已弃用，因为它仅有的-SHA1PRNG-算法为弱加密。"><a href="#名为-Crypto-的-JCA-提供程序已弃用，因为它仅有的-SHA1PRNG-算法为弱加密。" class="headerlink" title="名为 Crypto 的 JCA 提供程序已弃用，因为它仅有的 SHA1PRNG 算法为弱加密。"></a>名为 Crypto 的 JCA 提供程序已弃用，因为它仅有的 SHA1PRNG 算法为弱加密。</h3><h3 id="引入了App-shortcuts"><a href="#引入了App-shortcuts" class="headerlink" title="引入了App shortcuts"></a>引入了App shortcuts</h3><p>即在应用图标上长按唤出的快捷菜单</p>
+<h2 id="8-0"><a href="#8-0" class="headerlink" title="8.0"></a>8.0</h2><h3 id="通知"><a href="#通知" class="headerlink" title="通知"></a>通知</h3><ul>
+<li>加入了channelId以分渠道显示通知</li>
+<li>加入了通知标识</li>
+<li>通知可以休眠，稍后再显示</li>
+<li>通知超时</li>
+<li>通知设置</li>
+<li>通知清除回调</li>
+<li>通知背景颜色</li>
+<li>消息样式</li>
+</ul>
+<h3 id="自动填充框架"><a href="#自动填充框架" class="headerlink" title="自动填充框架"></a>自动填充框架</h3><h3 id="画中画模式"><a href="#画中画模式" class="headerlink" title="画中画模式"></a>画中画模式</h3><h3 id="可下载字体"><a href="#可下载字体" class="headerlink" title="可下载字体"></a>可下载字体</h3><h3 id="xml中的字体作为资源直接使用"><a href="#xml中的字体作为资源直接使用" class="headerlink" title="xml中的字体作为资源直接使用"></a>xml中的字体作为资源直接使用</h3><h3 id="自动调整TextView的大小"><a href="#自动调整TextView的大小" class="headerlink" title="自动调整TextView的大小"></a>自动调整TextView的大小</h3><h3 id="自适应图标"><a href="#自适应图标" class="headerlink" title="自适应图标"></a>自适应图标</h3><h3 id="Webview新api"><a href="#Webview新api" class="headerlink" title="Webview新api"></a>Webview新api</h3><ul>
+<li>Version API</li>
+<li>Google SafeBrowsing API</li>
+<li>Termination Handle API</li>
+<li>Renderer Importance API</li>
+</ul>
+<h3 id="固定的小部件和快捷方式"><a href="#固定的小部件和快捷方式" class="headerlink" title="固定的小部件和快捷方式"></a>固定的小部件和快捷方式</h3><h3 id="多窗口模式"><a href="#多窗口模式" class="headerlink" title="多窗口模式"></a>多窗口模式</h3><h3 id="统一的外边距和内边距设置"><a href="#统一的外边距和内边距设置" class="headerlink" title="统一的外边距和内边距设置"></a>统一的外边距和内边距设置</h3><h3 id="应用类别"><a href="#应用类别" class="headerlink" title="应用类别"></a>应用类别</h3><h3 id="AnimatorSet支持寻道和倒播"><a href="#AnimatorSet支持寻道和倒播" class="headerlink" title="AnimatorSet支持寻道和倒播"></a>AnimatorSet支持寻道和倒播</h3><h3 id="系统级别支持的缓存数据存放和清理"><a href="#系统级别支持的缓存数据存放和清理" class="headerlink" title="系统级别支持的缓存数据存放和清理"></a>系统级别支持的缓存数据存放和清理</h3><h3 id="ContentProvider分页"><a href="#ContentProvider分页" class="headerlink" title="ContentProvider分页"></a>ContentProvider分页</h3><h3 id="ContentProvider刷新"><a href="#ContentProvider刷新" class="headerlink" title="ContentProvider刷新"></a>ContentProvider刷新</h3><h3 id="JobScheduler支持队列执行"><a href="#JobScheduler支持队列执行" class="headerlink" title="JobScheduler支持队列执行"></a>JobScheduler支持队列执行</h3><h3 id="允许自定义数据存储"><a href="#允许自定义数据存储" class="headerlink" title="允许自定义数据存储"></a>允许自定义数据存储</h3><h3 id="findViewById会返回目标View的类型而不是父级的View"><a href="#findViewById会返回目标View的类型而不是父级的View" class="headerlink" title="findViewById会返回目标View的类型而不是父级的View"></a>findViewById会返回目标View的类型而不是父级的View</h3><h3 id="存储访问框架-SAF"><a href="#存储访问框架-SAF" class="headerlink" title="存储访问框架(SAF)"></a>存储访问框架(SAF)</h3><p>存储访问框架允许应用显示自定义<code>DocumentsProvider</code>，后者可以提供数据源(网络或本地)的数据访问的权限。</p>
+<ul>
+<li>自定义文档提供程序需要调用<code>StorageManager.openProxyFileDescriptor()</code>，传入<code>ProxyFileDescriptorCallback</code>对象作为参数</li>
+<li>直接文档访问，调用<code>MediaStore#getDocumentUri()</code>获取文档的uri，根据文档的id，可以调用<code>DocumentsContract#findDocumentPath()或DocumentsProvider#findDocumentPath()</code>来获取媒体文件实际上的路径</li>
+</ul>
+<h3 id="Wlan感知"><a href="#Wlan感知" class="headerlink" title="Wlan感知"></a>Wlan感知</h3><h3 id="蓝牙"><a href="#蓝牙" class="headerlink" title="蓝牙"></a>蓝牙</h3><ul>
+<li>支持蓝牙5.0</li>
+<li>增加Sony LDAC编码器支持</li>
+</ul>
+<h3 id="设备配对时允许自定义配对请求对话框"><a href="#设备配对时允许自定义配对请求对话框" class="headerlink" title="设备配对时允许自定义配对请求对话框"></a>设备配对时允许自定义配对请求对话框</h3><h3 id="智能分享"><a href="#智能分享" class="headerlink" title="智能分享"></a>智能分享</h3><h3 id="智能文本选择"><a href="#智能文本选择" class="headerlink" title="智能文本选择"></a>智能文本选择</h3><h3 id="新权限"><a href="#新权限" class="headerlink" title="新权限"></a>新权限</h3><ul>
+<li><code>ANSWER_PHONE_CALLS</code>，允许通过编程方式接听电话</li>
+<li><code>READ_PHONE_NUMBERS</code>，允许应用读取设备中的电话号码<br>都属于<code>PHONE</code>权限组，划分为<code>危险</code>级别</li>
+</ul>
+<h3 id="后台执行限制"><a href="#后台执行限制" class="headerlink" title="后台执行限制"></a>后台执行限制</h3><ul>
+<li>后台服务限制，空闲情况下，不允许后台服务运行，但是允许前台服务运行</li>
+<li>隐式广播限制，大多数隐式广播都不允许从清单文件注册，但是任然可以运行时注册</li>
+</ul>
+<h2 id="9-0"><a href="#9-0" class="headerlink" title="9.0"></a>9.0</h2><h3 id="室内定位支持"><a href="#室内定位支持" class="headerlink" title="室内定位支持"></a>室内定位支持</h3><h3 id="豁口屏支持"><a href="#豁口屏支持" class="headerlink" title="豁口屏支持"></a>豁口屏支持</h3><h3 id="多摄像头支持"><a href="#多摄像头支持" class="headerlink" title="多摄像头支持"></a>多摄像头支持</h3><h3 id="使用AnimatedImageDrawable支持WebP和Gif"><a href="#使用AnimatedImageDrawable支持WebP和Gif" class="headerlink" title="使用AnimatedImageDrawable支持WebP和Gif"></a>使用<code>AnimatedImageDrawable</code>支持WebP和Gif</h3><h3 id="支持HDR"><a href="#支持HDR" class="headerlink" title="支持HDR"></a>支持HDR</h3><h3 id="硬件支持密钥安全模块"><a href="#硬件支持密钥安全模块" class="headerlink" title="硬件支持密钥安全模块"></a>硬件支持密钥安全模块</h3><h3 id="密钥对安全导入"><a href="#密钥对安全导入" class="headerlink" title="密钥对安全导入"></a>密钥对安全导入</h3><h3 id="密钥轮转-更新"><a href="#密钥轮转-更新" class="headerlink" title="密钥轮转/更新"></a>密钥轮转/更新</h3><h3 id="客户端加密备份"><a href="#客户端加密备份" class="headerlink" title="客户端加密备份"></a>客户端加密备份</h3><h3 id="系统级应用活动追踪"><a href="#系统级应用活动追踪" class="headerlink" title="系统级应用活动追踪"></a>系统级应用活动追踪</h3><p>开发者选项-&gt;调试-&gt;系统跟踪</p>
+<h3 id="后台应用限制"><a href="#后台应用限制" class="headerlink" title="后台应用限制"></a>后台应用限制</h3><ul>
+<li>不能访问麦克风和摄像头</li>
+<li>使用连续报告模式的传感器不会接受事件</li>
+<li>使用变化或一次性报告模式的传感器不会接受事件<br><em>如果需要访问这些，请使用前台服务</em></li>
+</ul>
+<h3 id="限制访问通话记录"><a href="#限制访问通话记录" class="headerlink" title="限制访问通话记录"></a>限制访问通话记录</h3><h3 id="限制访电话号码"><a href="#限制访电话号码" class="headerlink" title="限制访电话号码"></a>限制访电话号码</h3><h3 id="限制访问wifi位置和连接信息"><a href="#限制访问wifi位置和连接信息" class="headerlink" title="限制访问wifi位置和连接信息"></a>限制访问wifi位置和连接信息</h3><h3 id="电话信息依赖设备定位"><a href="#电话信息依赖设备定位" class="headerlink" title="电话信息依赖设备定位"></a>电话信息依赖设备定位</h3><h3 id="加密算法实现变更，从Bouncy-Castle版本迁移到Conscrypt版本"><a href="#加密算法实现变更，从Bouncy-Castle版本迁移到Conscrypt版本" class="headerlink" title="加密算法实现变更，从Bouncy Castle版本迁移到Conscrypt版本"></a>加密算法实现变更，从<code>Bouncy Castle</code>版本迁移到<code>Conscrypt</code>版本</h3><h3 id="不再支持Android加密文件-ASEC"><a href="#不再支持Android加密文件-ASEC" class="headerlink" title="不再支持Android加密文件(ASEC)"></a>不再支持Android加密文件(ASEC)</h3><h3 id="Build-SERIAL始终返回UNKNOWN"><a href="#Build-SERIAL始终返回UNKNOWN" class="headerlink" title="Build.SERIAL始终返回UNKNOWN"></a><code>Build.SERIAL</code>始终返回<code>UNKNOWN</code></h3><p>应请求<code>READ_PHONE_STATE</code>权限后使用<code>Build.getSerial()</code>替代</p>
+<h3 id="默认开启TLS"><a href="#默认开启TLS" class="headerlink" title="默认开启TLS"></a>默认开启TLS</h3><h2 id="10"><a href="#10" class="headerlink" title="10"></a>10</h2><h3 id="隐私变更"><a href="#隐私变更" class="headerlink" title="隐私变更"></a>隐私变更</h3><ol>
+<li><p>不允许访问固定标识符</p>
+<ul>
+<li>Build</li>
+<li><code>getSerial()</code></li>
+<li>TelephonyManager</li>
+<li><code>getImei()</code></li>
+<li><code>getDeviceId()</code></li>
+<li><code>getMeid()</code></li>
+<li><code>getSimSerialNumber()</code></li>
+<li><code>getSubscriberId()</code></li>
+</ul>
+</li>
+<li><p>随机的MAC地址</p>
+</li>
+<li>无法访问<code>/proc/net</code></li>
+<li>非默认输入法应用或目前处于焦点的应用无法访问剪贴板</li>
+<li>未授予USB设备访问权限之无法读取USB设备序列号</li>
+</ol>
+<h3 id="应用无法启用或停用Wifi"><a href="#应用无法启用或停用Wifi" class="headerlink" title="应用无法启用或停用Wifi"></a>应用无法启用或停用Wifi</h3>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/11/01/版本变更重点/" data-id="cka3i9xbm00026g5efrnqygau" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Intent.createChooser拼接不同的Intent" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/10/24/Intent.createChooser拼接不同的Intent/" class="article-date">
+  <time datetime="2019-10-24T06:33:44.438Z" itemprop="datePublished">2019-10-24</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="使用Intent-createChooser生成处理不同数据类型的Intent的chooser对话框"><a href="#使用Intent-createChooser生成处理不同数据类型的Intent的chooser对话框" class="headerlink" title="使用Intent.createChooser生成处理不同数据类型的Intent的chooser对话框"></a>使用Intent.createChooser生成处理不同数据类型的Intent的chooser对话框</h1><h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>遇到一个需求，需要在选择图片时，能同时选择从相册中选取和拍照来生成，一般来说，可以自己定义一个对话框，不同的按钮对应不同的Intent来处理。但是后来我想起了Intent.createChooser这个方法，发现可以用这个方法直接生成系统样式的对话框。</p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">val</span> newIntent = Intent(Intent.ACTION_GET_CONTENT)</div><div class="line">newIntent.addCategory(Intent.CATEGORY_OPENABLE)</div><div class="line">newIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)</div><div class="line">newIntent.type = <span class="string">"image/*"</span></div><div class="line"></div><div class="line"><span class="keyword">val</span> cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)</div><div class="line"><span class="keyword">val</span> file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), <span class="string">"img.jpg"</span>)</div><div class="line"></div><div class="line">uri = Uri.fromFile(file)</div><div class="line">cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri)</div><div class="line"><span class="keyword">val</span> chooseIntent = Intent.createChooser(newIntent, <span class="string">"选择上传方式"</span>)</div><div class="line">chooseIntent.putExtra(Intent.EXTRA_TITLE, <span class="string">"选择上传方式"</span>)</div><div class="line">chooseIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf&lt;Parcelable&gt;(cameraIntent))</div><div class="line">startActivityForResult(chooseIntent, <span class="number">100</span>)</div></pre></td></tr></table></figure>
+<p>可以看到，关键代码就是<code>chooseIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf&lt;Parcelable&gt;(cameraIntent))</code>，加上了这个参数之后，就可以生成不同类型的Intent了。如果你还有别的需要，比如选择文件既想选择已经存在的，又想直接创建新的文件，那么就可以通过这个参数来拼接生成你需要的Chooser对话框了。</p>
+<h2 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h2><p>如果对应的Intent的action是需要权限的，比如拍照或者录制，同时针对的是Android 6以上的设备，请先动态获取权限，获取之后再继续操作。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/10/24/Intent.createChooser拼接不同的Intent/" data-id="cka3i9xc000036g5eaok34l7v" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-okhttp4.0源码总结" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/08/27/okhttp4.0源码总结/" class="article-date">
@@ -443,176 +670,6 @@
 
 
   
-    <article id="post-RxJava操作符使用1" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/09/05/RxJava操作符使用1/" class="article-date">
-  <time datetime="2017-09-05T12:51:21.000Z" itemprop="datePublished">2017-09-05</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/05/RxJava操作符使用1/">RxJava操作符使用1</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>RxJava用了很久了，但是一直都是最简单的<code>flatMap</code>或者<code>just</code>、<code>from</code>、<code>foreach</code>这种简单的操作符就完毕了，很难用到其他的操作符，等到用到的时候再去查又有一点太晚了，所以这次干脆就一次性全部都看看到底都是些什么操作符和作用。</p>
-</blockquote>
-<p><em>这些操作符都只针对当前我使用的版本：RxAndroid 1.1.2-RxJava 1.1.6来介绍，源文档来自<a href="http://reactivex.io/documentation/operators.html#categorized" target="_blank" rel="external">Rx官方文档</a></em></p>
-<h1 id="创建Observables"><a href="#创建Observables" class="headerlink" title="创建Observables"></a>创建Observables</h1><p>顾名思义，所有下列操作符都会创建Observable<strong>s</strong></p>
-<h2 id="Create"><a href="#Create" class="headerlink" title="Create"></a>Create</h2><blockquote>
-<p>create an Observable from scratch by calling observer methods programmatically<br>意思是调用observer的方法从头创建<strong>一个</strong>Observable</p>
-</blockquote>
-<p>示例代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">Observable.create(new Observable.OnSubscribe&lt;Integer&gt;() &#123;</div><div class="line">    @Override</div><div class="line">    public void call(Subscriber&lt;? super Integer&gt; observer) &#123;</div><div class="line">        try &#123;</div><div class="line">            if (!observer.isUnsubscribed()) &#123;</div><div class="line">                for (int i = 1; i &lt; 5; i++) &#123;</div><div class="line">                    observer.onNext(i);</div><div class="line">                &#125;</div><div class="line">                observer.onCompleted();</div><div class="line">            &#125;</div><div class="line">        &#125; catch (Exception e) &#123;</div><div class="line">            observer.onError(e);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"> &#125; ).subscribe(new Subscriber&lt;Integer&gt;() &#123;</div><div class="line">        @Override</div><div class="line">        public void onNext(Integer item) &#123;</div><div class="line">            System.out.println(&quot;Next: &quot; + item);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public void onError(Throwable error) &#123;</div><div class="line">            System.err.println(&quot;Error: &quot; + error.getMessage());</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public void onCompleted() &#123;</div><div class="line">            System.out.println(&quot;Sequence complete.&quot;);</div><div class="line">        &#125;</div><div class="line">    &#125;);</div></pre></td></tr></table></figure>
-<p>用Create操作符可以从头创建一个Observable，传递给这个Observable一个接收observer作为它的参数的方法，在这个方法体内按合适的顺序调用<code>onNext</code>，<code>onError</code>，<code>onCompleted</code>来让这个方法成为一个正确的的Observable-其中<code>onCompleted</code>和<code>onErrir</code>至少执行一个，并且它们之后不要再调用这个Observable的其它方法。</p>
-<h2 id="Defer"><a href="#Defer" class="headerlink" title="Defer"></a>Defer</h2><blockquote>
-<p>当observer订阅时，给每个observer创建一个新的Observable</p>
-</blockquote>
-<p>示例代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/09/05/RxJava操作符使用1/" data-id="cjvwfwgmj000284w2l9o1rsp5" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-leetcode_226" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/07/20/leetcode_226/" class="article-date">
-  <time datetime="2017-07-20T13:19:00.000Z" itemprop="datePublished">2017-07-20</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/07/20/leetcode_226/">leetcode no.226</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="大家都知道的Google拒绝HomeBrew作者的反转二叉树"><a href="#大家都知道的Google拒绝HomeBrew作者的反转二叉树" class="headerlink" title="大家都知道的Google拒绝HomeBrew作者的反转二叉树"></a>大家都知道的Google拒绝HomeBrew作者的反转二叉树</h1><p>##说明</p>
-<p>原本的二叉树如下：</p>
-<pre><code>     4
-   /   \
-  2     7
- / \   / \
-1   3 6   9
-</code></pre><p>转换之后的二叉树如下：</p>
-<pre><code>     4
-   /   \
-  7     2
- / \   / \
-9   6 3   1
-</code></pre><p>##leetcode提供分析<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">  * Definition for a binary tree node.</div><div class="line">  * public class TreeNode &#123;</div><div class="line">  * int val;</div><div class="line">  * TreeNode left;</div><div class="line">  * TreeNode right;</div><div class="line">  * TreeNode(int x) &#123; val = x; &#125;</div><div class="line">  * &#125;</div><div class="line">  */</div></pre></td></tr></table></figure></p>
-<p>##具体分析<br>没啥好说的，每个节点都遍历之后交换子节点即可</p>
-<p>##具体实现(Java)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">public class Solution &#123;</div><div class="line">    public TreeNode invertTree(TreeNode root) &#123;</div><div class="line">        root = invert(root);</div><div class="line">        sout(root);</div><div class="line">        return root;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    private TreeNode invert(TreeNode node)&#123;</div><div class="line">        if(node != null )&#123;//&amp;&amp; node.left != null &amp;&amp; node.right != null</div><div class="line">            TreeNode tmp = node.left;</div><div class="line">            node.left = invert(node.right);</div><div class="line">            node.right = invert(tmp);</div><div class="line">        &#125;</div><div class="line">        return node;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    private String sout(TreeNode node)&#123;</div><div class="line">        if(node == null)&#123;</div><div class="line">            return &quot;null&quot;;</div><div class="line">        &#125;</div><div class="line">        StringBuilder builder = new StringBuilder();</div><div class="line">        builder.append(node.val).append(&quot;\n&quot;);</div><div class="line">        if(node.left != null)&#123;</div><div class="line">            builder.append(&quot;-&quot;).append(sout(node.left)).append(&quot;\n&quot;);</div><div class="line">        &#125;</div><div class="line">        if(node.right != null)&#123;</div><div class="line">            builder.append(&quot;-&quot;).append(sout(node.right)).append(&quot;\n&quot;);</div><div class="line">        &#125;</div><div class="line">        return builder.toString();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/07/20/leetcode_226/" data-id="cjvwfwgoe000684w2meldf8ll" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-notice" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/05/15/notice/" class="article-date">
-  <time datetime="2017-05-15T12:37:50.255Z" itemprop="datePublished">2017-05-15</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="小提示，等有空了可以操作分类"><a href="#小提示，等有空了可以操作分类" class="headerlink" title="小提示，等有空了可以操作分类"></a>小提示，等有空了可以操作分类</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">android.support.design.widget.CollapsingToolbarLayout的层级问题</div><div class="line">有两个子View：A,B</div><div class="line">布局如下</div><div class="line">&lt;CollapsingToolbarLayout&gt;</div><div class="line">&lt;A/&gt;</div><div class="line">&lt;B/&gt;</div><div class="line">&lt;/CollapsingToolbarLayout&gt;</div><div class="line">如果此时设置layout_collapseMode=pin,那么B的内容会在A的上层</div></pre></td></tr></table></figure>
-<p><code>elevation只在有background时起作用</code></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/05/15/notice/" data-id="cjvwfwgml000384w2ktq1kw96" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-realm&amp;databinding" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/05/08/realm&databinding/" class="article-date">
-  <time datetime="2017-05-08T14:26:35.495Z" itemprop="datePublished">2017-05-08</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/05/08/realm&databinding/">Realm Bugs</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Realm和DataBinding混用的一个小bug"><a href="#Realm和DataBinding混用的一个小bug" class="headerlink" title="Realm和DataBinding混用的一个小bug"></a>Realm和DataBinding混用的一个小bug</h1><h2 id="原本有一个实体类A，新加了一个类型为ArrayList-lt-B-gt-的字段，这个B内部有一个ArrayList-lt-String-gt-字段，然后编译发现抛出错误：java-Type-java-util-List-of-field-b-is-not-supported；大致意思就是Realm不支持直接使用ArrayList-lt-String-gt-作为类的字段。"><a href="#原本有一个实体类A，新加了一个类型为ArrayList-lt-B-gt-的字段，这个B内部有一个ArrayList-lt-String-gt-字段，然后编译发现抛出错误：java-Type-java-util-List-of-field-b-is-not-supported；大致意思就是Realm不支持直接使用ArrayList-lt-String-gt-作为类的字段。" class="headerlink" title="原本有一个实体类A，新加了一个类型为ArrayList&lt;B&gt;的字段，这个B内部有一个ArrayList&lt;String&gt;字段，然后编译发现抛出错误：java: Type java.util.List of field b is not supported；大致意思就是Realm不支持直接使用ArrayList&lt;String&gt;作为类的字段。"></a>原本有一个实体类A，新加了一个类型为<code>ArrayList&lt;B&gt;</code>的字段，这个B内部有一个<code>ArrayList&lt;String&gt;</code>字段，然后编译发现抛出错误：java: Type java.util.List<java.lang.string> of field b is not supported；大致意思就是Realm不支持直接使用<code>ArrayList&lt;String&gt;</code>作为类的字段。</java.lang.string></h2><p>去到realm的github找到解决方案：采用<code>RealmList</code>代替<code>ArrayList</code>，新建一个<code>StringObject</code>继承<code>RealmObject</code>，这个StringObject只有一个<code>String</code>类型的字段，大致类似于<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">class StringObject extends RealmObject &#123;</div><div class="line">    @PrimaryKey</div><div class="line">    private String string;</div><div class="line">    //...getter &amp; setter</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h2 id="那么问题解决了么？并没有。编译依然抛出错误，错误变成了xxx-xxx-xxx-binding-not-found，大致意思就是没找到binding类，不过没有指明到哪一行。"><a href="#那么问题解决了么？并没有。编译依然抛出错误，错误变成了xxx-xxx-xxx-binding-not-found，大致意思就是没找到binding类，不过没有指明到哪一行。" class="headerlink" title="那么问题解决了么？并没有。编译依然抛出错误，错误变成了xxx.xxx.xxx.binding not found，大致意思就是没找到binding类，不过没有指明到哪一行。"></a>那么问题解决了么？并没有。编译依然抛出错误，错误变成了<code>xxx.xxx.xxx.binding not found</code>，大致意思就是没找到binding类，不过没有指明到哪一行。</h2><p>好，继续排查，没有指明到哪一行就多输出一点log吧，使用命令行手动编译<code>gradle assembleDebug --info --debug --stacktrace</code>，之后真正的问题出现了：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">A did not create a default no param constructor</div><div class="line">B did not create a default no param constructor</div><div class="line">StringObject did not create a default no param constructor</div></pre></td></tr></table></figure></p>
-<p>意思是没有添加一个默认的无参构造函数，那么直接添加上，编译通过，完毕。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/05/08/realm&databinding/" data-id="cjvwfwgoq000884w2iezp5w1l" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
 
 
   <nav id="page-nav">
@@ -634,7 +691,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li></ul>
     </div>
   </div>
 
@@ -647,23 +704,23 @@
       <ul>
         
           <li>
+            <a href="/2020/05/09/Android各版本唤起app安装解决方案/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/05/09/shadowsocks配置v2ray插件记录/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2019/11/01/版本变更重点/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2019/10/24/Intent.createChooser拼接不同的Intent/">(no title)</a>
+          </li>
+        
+          <li>
             <a href="/2019/08/27/okhttp4.0源码总结/">(no title)</a>
-          </li>
-        
-          <li>
-            <a href="/2019/06/03/build.gradle配置踩坑记录/">(no title)</a>
-          </li>
-        
-          <li>
-            <a href="/2019/05/23/Gradle Build流程说明/">(no title)</a>
-          </li>
-        
-          <li>
-            <a href="/2019/05/10/Retrofit流程分析/">(no title)</a>
-          </li>
-        
-          <li>
-            <a href="/2018/08/26/mvp实战感受/">(no title)</a>
           </li>
         
       </ul>
@@ -678,7 +735,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2019 halfcup<br>
+      &copy; 2020 halfcup<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
