@@ -48,9 +48,9 @@
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
@@ -60,6 +60,51 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-leetcode_564" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/05/18/leetcode_564/" class="article-date">
+  <time datetime="2020-05-18T05:58:32.406Z" itemprop="datePublished">2020-05-18</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="原问题地址"><a href="#原问题地址" class="headerlink" title="原问题地址"></a>原问题地址</h2><blockquote>
+<p><a href="https://leetcode.com/explore/interview/card/top-interview-questions-easy/92/array/564/" target="_blank" rel="external">https://leetcode.com/explore/interview/card/top-interview-questions-easy/92/array/564/</a></p>
+</blockquote>
+<h2 id="问题翻译"><a href="#问题翻译" class="headerlink" title="问题翻译"></a>问题翻译</h2><p>有一个代表价格的数组，第i个元素代表第i天的价格。<br>设计一个算法来获取最大的利润，所以你可能进行需要尽可能多次的交易。<br>注意，买入和卖出不能在同一天，你也可以理解为买入和卖出都要花费一天时间。</p>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><h3 id="输入"><a href="#输入" class="headerlink" title="输入"></a>输入</h3><p>[7,1,5,3,6,4]</p>
+<h3 id="解释"><a href="#解释" class="headerlink" title="解释"></a>解释</h3><ol>
+<li>第2天买入，价格为1，第3天卖出，价格为5，获利4</li>
+<li>第4天买入，价格为3，第5天卖出，价格为6，获利3</li>
+<li>总获利7<h3 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h3>结果为7</li>
+</ol>
+<h2 id="问题解析"><a href="#问题解析" class="headerlink" title="问题解析"></a>问题解析</h2><p>把问题分区间来看，就变成了寻找一段区间之内的最小数和最大数，一旦寻找到一个最大数即完成一次<strong>交易</strong>，所以具体步骤如下：</p>
+<ol>
+<li>数组price，从一个确定的点i出发，此时最小数和最大数的下标为prior和later，此时i=prior=later；</li>
+<li>向后移动下标，得到当前元素price[j]；</li>
+<li>如果price[j]小于price[prior]，则prior=j；</li>
+<li>如果price[j]大于price[later]，则later=j；</li>
+<li>如果price[j]小于price[later]，则视为找到一个区间最大数，进行交易，sum+=price[later]-price[prior]；</li>
+<li>存在一个特例，即当下标到达数组的末尾时，无法再增加/减小，所以可以直接视为区间最大数。</li>
+</ol>
+<h2 id="通过的解决方案"><a href="#通过的解决方案" class="headerlink" title="通过的解决方案"></a>通过的解决方案</h2><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">fun</span> <span class="title">maxProfit</span><span class="params">(prices: <span class="type">IntArray</span>)</span></span>: <span class="built_in">Int</span> &#123;</div><div class="line">    <span class="keyword">return</span> prices.let &#123;</div><div class="line">        <span class="keyword">if</span> (it.size &lt;= <span class="number">1</span>) &#123;</div><div class="line">            <span class="number">0</span></div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">val</span> fullIndex = it.indices</div><div class="line">            <span class="comment">//start from 0</span></div><div class="line">            <span class="keyword">var</span> prior = <span class="number">0</span></div><div class="line">            <span class="keyword">var</span> later = <span class="number">0</span></div><div class="line"></div><div class="line">            <span class="keyword">var</span> sum = <span class="number">0</span></div><div class="line">            <span class="keyword">while</span> (prior <span class="keyword">in</span> fullIndex) &#123;</div><div class="line">                <span class="keyword">if</span> (it[prior] &gt; it[later]) &#123;</div><div class="line">                    prior = later</div><div class="line">                &#125; <span class="keyword">else</span> &#123;</div><div class="line">                    <span class="keyword">for</span> (index <span class="keyword">in</span> prior until it.size) &#123;</div><div class="line">                        <span class="keyword">if</span> (index == it.size - <span class="number">1</span>) &#123;</div><div class="line">                            <span class="comment">//last,need skip</span></div><div class="line">                            sum += <span class="keyword">if</span> (it[index] &gt; it[later]) &#123;</div><div class="line">                                it[index] - it[prior]</div><div class="line">                            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                                it[later] - it[prior]</div><div class="line">                            &#125;</div><div class="line">                            prior = it.size</div><div class="line">                        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (it[index] &gt; it[later]) &#123;</div><div class="line">                            later = index</div><div class="line">                        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (it[index] &lt; it[later]) &#123;</div><div class="line">                            sum += it[later] - it[prior]</div><div class="line">                            later = index</div><div class="line">                            prior = index</div><div class="line">                            <span class="keyword">break</span></div><div class="line">                        &#125;</div><div class="line">                    &#125;</div><div class="line">                    <span class="keyword">if</span> (later == <span class="number">0</span>) &#123;</div><div class="line">                        <span class="comment">//not found</span></div><div class="line">                        <span class="keyword">break</span></div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            sum</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/05/18/leetcode_564/" data-id="ckac3w85i00000c5e2k8sfbbe" class="article-share-link">Partager</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-leetcode_727" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -83,7 +128,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/05/14/leetcode_727/" data-id="cka6i8fz600005w5ef1x6mf9h" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/05/14/leetcode_727/" data-id="cka6i8fz600005w5ef1x6mf9h" class="article-share-link">Partager</a>
       
       
     </footer>
@@ -155,7 +200,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/05/09/Android各版本唤起app安装解决方案/" data-id="cka3i9xar00006g5e2bbidu5y" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/05/09/Android各版本唤起app安装解决方案/" data-id="cka3i9xar00006g5e2bbidu5y" class="article-share-link">Partager</a>
       
       
     </footer>
@@ -184,7 +229,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/05/09/shadowsocks配置v2ray插件记录/" data-id="cka3i9xbi00016g5ehho9vpmy" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/05/09/shadowsocks配置v2ray插件记录/" data-id="cka3i9xbi00016g5ehho9vpmy" class="article-share-link">Partager</a>
       
       
     </footer>
@@ -280,7 +325,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/11/01/版本变更重点/" data-id="cka3i9xbm00026g5efrnqygau" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/11/01/版本变更重点/" data-id="cka3i9xbm00026g5efrnqygau" class="article-share-link">Partager</a>
       
       
     </footer>
@@ -310,7 +355,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/10/24/Intent.createChooser拼接不同的Intent/" data-id="cka3i9xc000036g5eaok34l7v" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/10/24/Intent.createChooser拼接不同的Intent/" data-id="cka3i9xc000036g5eaok34l7v" class="article-share-link">Partager</a>
       
       
     </footer>
@@ -413,7 +458,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/27/okhttp4.0源码总结/" data-id="ck0yzbijn00017gw2ucskdn14" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/08/27/okhttp4.0源码总结/" data-id="ck0yzbijn00017gw2ucskdn14" class="article-share-link">Partager</a>
       
       
     </footer>
@@ -448,7 +493,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/06/03/build.gradle配置踩坑记录/" data-id="ck0yzbija00007gw2rsa3a5nn" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/06/03/build.gradle配置踩坑记录/" data-id="ck0yzbija00007gw2rsa3a5nn" class="article-share-link">Partager</a>
       
       
     </footer>
@@ -529,7 +574,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/05/23/Gradle Build流程说明/" data-id="cjw8tp6rd00003sw2azczfinq" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/05/23/Gradle Build流程说明/" data-id="cjw8tp6rd00003sw2azczfinq" class="article-share-link">Partager</a>
       
       
     </footer>
@@ -594,43 +639,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/05/10/Retrofit流程分析/" data-id="cjvwfwgm9000084w2e10nqgct" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-mvp实战感受" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/08/26/mvp实战感受/" class="article-date">
-  <time datetime="2018-08-26T14:10:57.783Z" itemprop="datePublished">2018-08-26</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="MVP使用感受"><a href="#MVP使用感受" class="headerlink" title="MVP使用感受"></a>MVP使用感受</h1><p>花了一个月时间去外包感受了一下外包的氛围，意外居然碰到了使用MVP的项目，正好使用一下，以弥补之前没用上的遗憾，顺带说一下感受</p>
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><ul>
-<li>m-&gt;model，基本上是实体类</li>
-<li>v-&gt;view，对界面的操作封装，一般是Activity或者Fragment来实现</li>
-<li>p-&gt;presenter，业务逻辑的封装层，一般持有view的实例，以便刷新界面</li>
-</ul>
-<h2 id="经验之谈"><a href="#经验之谈" class="headerlink" title="经验之谈"></a>经验之谈</h2><ol>
-<li>对v来说，有需要的话可以提取reg&amp;unreg方法，把一些需要和生命周期关联的方法放在这边，不过没有需要的话也可以不提；</li>
-<li>对p来说，如果业务很复杂，重用了某个p，或者是某个p里面的同一方法需要调用不同的方法，最好再定义一个类似remote source这样的工具，根据参数提供不同的请求。</li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/26/mvp实战感受/" data-id="cjvwfwgmm000484w2aifxponp" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/05/10/Retrofit流程分析/" data-id="cjvwfwgm9000084w2e10nqgct" class="article-share-link">Partager</a>
       
       
     </footer>
@@ -669,9 +678,13 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
+    <h3 class="widget-title">Articles récents</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2020/05/18/leetcode_564/">(no title)</a>
+          </li>
         
           <li>
             <a href="/2020/05/14/leetcode_727/">(no title)</a>
@@ -689,10 +702,6 @@
             <a href="/2019/11/01/版本变更重点/">(no title)</a>
           </li>
         
-          <li>
-            <a href="/2019/10/24/Intent.createChooser拼接不同的Intent/">(no title)</a>
-          </li>
-        
       </ul>
     </div>
   </div>
@@ -706,7 +715,7 @@
   <div class="outer">
     <div id="footer-info" class="inner">
       &copy; 2020 halfcup<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>
